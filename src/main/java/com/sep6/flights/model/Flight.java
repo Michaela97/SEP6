@@ -1,15 +1,21 @@
 package com.sep6.flights.model;
 
 
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @AllArgsConstructor
+@Table(name = "flights")
 @Data
+@NoArgsConstructor
 public class Flight {
 
     @Id
@@ -20,11 +26,16 @@ public class Flight {
     private int dep_time;
     private int arr_time;
     private int arr_delay;
+    @Column(nullable = true)
     private String carrier;
+    @Column(nullable = true)
     private String tailnum;
     private int flight;
+    @Column(nullable = true)
     private String origin;
+    @Column(nullable = true)
     private String dest;
+    @Nullable
     private int air_time;
     private int distance;
     private int hour;

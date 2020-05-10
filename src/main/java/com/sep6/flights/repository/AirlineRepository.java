@@ -1,4 +1,4 @@
-package com.sep6.flights.model.repository;
+package com.sep6.flights.repository;
 
 import com.sep6.flights.model.Airline;
 import org.springframework.data.jpa.repository.JpaRepository;
