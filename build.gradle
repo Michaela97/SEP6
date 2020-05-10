@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.7.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id 'groovy'
 }
 
 group = 'com.sep6'
@@ -27,6 +28,11 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testImplementation(
+			'junit:junit:4.12',
+			'org.codehaus.groovy:groovy-all:2.4.11',
+			'org.spockframework:spock-core:1.1-groovy-2.4'
+	)
 }
 
 test {
