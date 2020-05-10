@@ -8,6 +8,7 @@ public class Sep6Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Sep6Application.class, args);
+		System.out.println("Hello Word");
 	}
 
 }

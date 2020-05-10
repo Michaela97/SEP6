@@ -1,0 +1,11 @@
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://35.228.179.140:5432/postgres
+    username: postgres
+    password: x25BLAbBy5aJ5qt2
+    driverClassName: org.postgresql.Driver
