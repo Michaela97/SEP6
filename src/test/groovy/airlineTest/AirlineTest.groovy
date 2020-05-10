@@ -1,5 +1,6 @@
-package com.sep6.flights
+package airlineTest
 
+import com.sep6.flights.Sep6Application
 import com.sep6.flights.model.repository.AirlineRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -7,20 +8,25 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 @ContextConfiguration
-@SpringBootTest
+@SpringBootTest(classes = Sep6Application.class)
 class AirlineTest extends Specification {
 
-    @Autowired
+    @Autowired(required=true)
     private AirlineRepository airlineRepository
 
+
+    def "one plus one should equal two"() {
+        expect:
+        1 + 1 == 2
+    }
 
 
     def "test get all airlines"(){
         when:
         def allAirlines = airlineRepository.findAll()
 
-        expect:
-        !allAirlines.empty
+        then:
+        assert !allAirlines.empty
 
     }
 }
