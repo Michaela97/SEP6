@@ -1,7 +1,7 @@
 package airlineTest
 
 import com.sep6.flights.Sep6Application
-import com.sep6.flights.model.repository.AirlineRepository
+import com.sep6.flights.repository.AirlineRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
