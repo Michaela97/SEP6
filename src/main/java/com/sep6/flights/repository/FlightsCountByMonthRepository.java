@@ -11,4 +11,5 @@ public interface FlightsCountByMonthRepository extends JpaRepository<FlightsCoun
 
     List<FlightsCountByMonth> getCount();
 
+
 }
