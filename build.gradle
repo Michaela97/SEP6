@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.sep6'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '14'
 
 configurations {
@@ -16,6 +16,10 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+bootJar {
+	mainClassName = 'com.sep6.flights.Sep6Application'
 }
 
 dependencies {
@@ -34,3 +38,4 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
