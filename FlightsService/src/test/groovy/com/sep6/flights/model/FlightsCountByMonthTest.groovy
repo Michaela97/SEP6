@@ -22,6 +22,7 @@ class FlightsCountByMonthTest extends Specification {
 
         then:
         assert !result.isEmpty()
+        assert  result.size() == 12
     }
 
 }

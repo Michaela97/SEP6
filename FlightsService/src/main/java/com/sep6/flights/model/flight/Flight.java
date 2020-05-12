@@ -1,4 +1,4 @@
-package com.sep6.flights.model;
+package com.sep6.flights.model.flight;
 
 
 import com.sun.istack.Nullable;
@@ -12,9 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@AllArgsConstructor
 @Table(name = "flights")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Flight {
 
@@ -41,6 +41,5 @@ public class Flight {
     private int hour;
     private int minute;
 
-
-
 }
+
