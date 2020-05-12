@@ -1,6 +1,5 @@
 
 var responseData = "test";
-//document.getElementById("myText").innerHTML = responseData;
 
 
 function fetchDataTest() {
