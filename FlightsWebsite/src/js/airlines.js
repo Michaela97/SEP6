@@ -27,7 +27,7 @@ function status(response) {
   
 function json(response) {
     return response.json()
-  }
+}
 
 function showGraph() {
     window.onload = function () {

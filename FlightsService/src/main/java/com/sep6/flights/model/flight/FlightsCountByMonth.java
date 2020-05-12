@@ -1,4 +1,4 @@
-package com.sep6.flights.model;
+package com.sep6.flights.model.flight;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Data
 @NamedQuery(name = "FlightsCountByMonth.getCount",
-        query = "select new com.sep6.flights.model.FlightsCountByMonth( f.month, count(f.id)) " +
+        query = "select new com.sep6.flights.model.flight.FlightsCountByMonth( f.month, count(f.id)) " +
                 "from Flight as f group by f.month " +
                 "order by f.month")
 public class FlightsCountByMonth {
