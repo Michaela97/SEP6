@@ -1,4 +1,4 @@
-package com.sep6.flights.model;
+package com.sep6.flights.model.airline;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "airlines")
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Airline {
 

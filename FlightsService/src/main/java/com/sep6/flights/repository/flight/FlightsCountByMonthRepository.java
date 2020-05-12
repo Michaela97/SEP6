@@ -1,4 +1,4 @@
-package com.sep6.flights.repository;
+package com.sep6.flights.repository.flight;
 
 import com.sep6.flights.model.flight.FlightsCountByMonth;
 import org.springframework.data.jpa.repository.JpaRepository;

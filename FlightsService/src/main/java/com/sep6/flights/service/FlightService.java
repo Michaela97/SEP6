@@ -1,8 +1,8 @@
 package com.sep6.flights.service;
 
 import com.sep6.flights.model.flight.FlightsCountByMonth;
-import com.sep6.flights.repository.FlightRepository;
-import com.sep6.flights.repository.FlightsCountByMonthRepository;
+import com.sep6.flights.repository.flight.FlightRepository;
+import com.sep6.flights.repository.flight.FlightsCountByMonthRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

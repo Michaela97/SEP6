@@ -1,14 +1,18 @@
-package com.sep6.flights.model;
+package com.sep6.flights.model.airport;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@AllArgsConstructor
+@Table(name = "airports")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Airport {
 
     @Id

@@ -1,7 +1,7 @@
 package com.sep6.flights.model
 
 import com.sep6.flights.Sep6Application
-import com.sep6.flights.repository.FlightsCountByMonthRepository
+import com.sep6.flights.repository.flight.FlightsCountByMonthRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration

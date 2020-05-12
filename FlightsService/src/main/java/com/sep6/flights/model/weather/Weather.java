@@ -1,16 +1,20 @@
-package com.sep6.flights.model;
+package com.sep6.flights.model.weather;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@AllArgsConstructor
+@Table(name = "weather")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Weather {
 
     @Id
