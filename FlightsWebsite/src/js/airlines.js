@@ -13,14 +13,15 @@ function fetchDataTest() {
         console.log(responseData)
 
     }).catch(function(error) {
-    console.log('Request failed', error);
+    console.log('Request failed', error.name);
     });
 }
 
 function status(response) {
     if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response)
+        return Promise.resolve(response)
     } else {
+        console.log('Response code: ' + response.status);
       return Promise.reject(new Error(response.statusText))
     }
   }
