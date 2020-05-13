@@ -3,22 +3,14 @@ const url = 'https://flights-service-buki55n7ba-lz.a.run.app/flights/';
 
 function getFlights() {
 
-    fetch(url + 'getTotalNumberOfFlights', {
-
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': url
-        },
-        mode: 'no-cors'
-
-    })
+    fetch(url + 'getTotalNumberOfFlights')
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then(function (data) {
             // document.getElementById("myText").innerHTML = responseData;
             console.log(data);
 
-        }).catch(function(error) {
+        }).catch(function (error) {
         console.log('Request failed', error);
     });
 }
