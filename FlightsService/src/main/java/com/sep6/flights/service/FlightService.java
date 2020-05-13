@@ -27,6 +27,22 @@ public class FlightService {
         return flightsCountByMonthRepository.getCount();
     }
 
+    @GetMapping("/getTotalNumberOfFlightsFromJFK")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromJFK() {
+        return flightsCountByMonthRepository.getCountFromJFK();
+    }
+
+    @GetMapping("/getTotalNumberOfFlightsFromLGA")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromLGA() {
+        return flightsCountByMonthRepository.getCountFromLGA();
+    }
+
+    @GetMapping("/getTotalNumberOfFlightsFromEWR")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromEWR() {
+        return flightsCountByMonthRepository.getCountFromEWR();
+    }
+
+
     @GetMapping("/deployTest")
     public String test() {
         return "Hello! You have deployed it successfully :D";
