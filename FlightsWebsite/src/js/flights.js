@@ -27,5 +27,3 @@ function status(response) {
 function json(response) {
     return response.json()
 }
-
-getFlights();
