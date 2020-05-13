@@ -1,4 +1,4 @@
-package com.sep6.flights.model
+package com.sep6.flights.model.flight
 
 import com.sep6.flights.Sep6Application
 import com.sep6.flights.repository.flight.FlightsCountByMonthRepository
