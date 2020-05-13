@@ -71,7 +71,27 @@ async function getFlightsFromOrigins() {
 
     showTotalFlightsFromOrigins(resultLGA, resultJFK, resultEWR);
 
+}
 
+function getTopTenDestinations() {
+
+    fetch("http://localhost:8080/flights/" + 'getTopTenDestinations')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+
+            data.forEach(element => {
+                    result.push({y: element.countOfFlights, label: element.destination});
+                }
+            )
+
+            showTopDestinations(result)
+
+        }).catch(function (error) {
+        console.log('Request failed', error);
+    });
 }
 
 function status(response) {
@@ -107,6 +127,29 @@ function showTotalFlights(data) {
             showInLegend: true,
             legendMarkerColor: "grey",
             legendText: "Month",
+            dataPoints: data
+        }]
+    });
+    chart.render();
+}
+
+function showTopDestinations(data) {
+
+    let chart = new CanvasJS.Chart("chartContainer", {
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        exportEnabled: true,
+        animationEnabled: true,
+        title: {
+            text: "Top 10 Destinations"
+        },
+        data: [{
+            type: "pie",
+            startAngle: 25,
+            toolTipContent: "<b>{label}</b> : {y} flights",
+            showInLegend: "true",
+            legendText: "{label}",
+            indexLabelFontSize: 16,
+            indexLabel: "{label}",
             dataPoints: data
         }]
     });
@@ -169,6 +212,9 @@ function selectedFlight() {
     }
     if (flightOption == 2) {
         getFlightsFromOrigins();
+    }
+    if (flightOption == 4) {
+        getTopTenDestinations();
     }
 }
 
