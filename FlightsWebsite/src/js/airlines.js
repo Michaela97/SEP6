@@ -63,5 +63,13 @@ function showGraph() {
     }
 }
 
+function selectedFlight() {
+
+    const option = document.getElementById("flights");
+    let flightOption = option.options[option.selectedIndex].value;
+    console.log("selected flight: " + flightOption);
+
+}
+
 showGraph();
 fetchDataTest();

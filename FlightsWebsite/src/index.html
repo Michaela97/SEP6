@@ -33,11 +33,33 @@
 
         <div class="w3-padding-32">
             <div class="w3-bar w3-border">
-                <a href="#" class="w3-bar-item w3-button">Total number of flights per month</a>
-                <a href="#" class="w3-bar-item w3-button ">Top-10 destinations</a>
+
+                <select id="flights" class="w3-bar-item w3-button" onclick="selectedFlight()">
+                    <option value="0" >Flights</option>
+                    <option value="1">Total number of flights per month</option>
+                    <option value="2">Total number of flights per month from origin</option>
+                    <option value="3">Total number of each flight</option>
+                    <option value="4">Top 10 destinations</option>
+                </select>
+
+                <select id="planes" class="w3-bar-item w3-button">
+                    <option value="0" >Planes and Departures</option>
+                    <option value="1" >The number of plane of each Airbus Model</option>
+                    <option value="2">Manufactures that have more than 200 planes</option>
+                    <option value="3">Mean departure and arrival delay for each origin</option>
+                    <option value="4">The mean airtime of each origin</option>
+                </select>
+
+                <select id="weather" class="w3-bar-item w3-button">
+                    <option value="0" >Weather</option>
+                    <option value="1">Daily mean temperature for each origin</option>
+                    <option value="2">Daily mean temperature at JFK</option>
+                    <option value="3" >The temperature at JFK</option>
+                    <option value="4">For three origins all temperatures attributes</option>
+                    <option value="5">Weather observation</option>
+                </select>
+
                 <!-- w3-light-grey = for selected one-->
-                <a href="#" class="w3-bar-item w3-button">Planes</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small">Daily mean temperature</a>
             </div>
         </div>
     </header>
