@@ -15,6 +15,24 @@ import javax.persistence.Id;
         query = "select new com.sep6.flights.model.flight.FlightsCountByMonth( f.month, count(f.id)) " +
                 "from Flight as f group by f.month " +
                 "order by f.month")
+@NamedQuery(name = "FlightsCountByMonth.getCountFromJFK",
+        query = "select new com.sep6.flights.model.flight.FlightsCountByMonth( f.month, count(f.id)) " +
+                "from Flight as f  " +
+                "where f.origin = 'JFK' " +
+                "group by f.month " +
+                "order by f.month")
+@NamedQuery(name = "FlightsCountByMonth.getCountFromLGA",
+        query = "select new com.sep6.flights.model.flight.FlightsCountByMonth( f.month, count(f.id)) " +
+                "from Flight as f  " +
+                "where f.origin = 'LGA' " +
+                "group by f.month " +
+                "order by f.month")
+@NamedQuery(name = "FlightsCountByMonth.getCountFromEWR",
+        query = "select new com.sep6.flights.model.flight.FlightsCountByMonth( f.month, count(f.id)) " +
+                "from Flight as f  " +
+                "where f.origin = 'EWR' " +
+                "group by f.month " +
+                "order by f.month")
 public class FlightsCountByMonth {
 
     @Id

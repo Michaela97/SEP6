@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,21 @@ public class FlightService {
     @GetMapping("/getTotalNumberOfFlights")
     public List<FlightsCountByMonth> getTotalNumberOfFlights() {
         return flightsCountByMonthRepository.getCount();
+    }
+
+    @GetMapping("/getTotalNumberOfFlightsFromJFK")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromJFK() {
+        return flightsCountByMonthRepository.getCountFromJFK();
+    }
+
+    @GetMapping("/getTotalNumberOfFlightsFromLGA")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromLGA() {
+        return flightsCountByMonthRepository.getCountFromLGA();
+    }
+
+    @GetMapping("/getTotalNumberOfFlightsFromEWR")
+    public List<FlightsCountByMonth> getTotalNumberOfFlightsFromEWR() {
+        return flightsCountByMonthRepository.getCountFromEWR();
     }
 
     @GetMapping("/deployTest")
