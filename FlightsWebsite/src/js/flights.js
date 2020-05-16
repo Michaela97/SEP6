@@ -94,6 +94,25 @@ function getTopTenDestinations() {
     });
 }
 
+function getFlightsByManufacturer() {
+
+    fetch("http://localhost:8080/flights/" + 'getFlightsByManufacturer')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+            data.forEach(element => {
+                    result.push({y: element.countOfFlights, label: element.manufacturer});
+                }
+            )
+            showFlightsByManufacturer(result)
+
+        }).catch(function (error) {
+        console.log('Request failed', error);
+    });
+}
+
 function status(response) {
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response)
@@ -202,6 +221,27 @@ function showTotalFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
     chart.render();
 }
 
+function showFlightsByManufacturer(data) {
+
+    let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "The number of flights each manufacturer with more than 200 planes are responsible for"
+        },
+        axisY: {
+            title: "Total number of flights",
+            titleFontSize: 24
+        },
+        data: [{
+            type: "column",
+            yValueFormatString: "#,### flights",
+            dataPoints: data
+        }]
+    });
+    chart.render();
+}
+
 function selectedFlight() {
 
     const option = document.getElementById("flights");
@@ -212,6 +252,9 @@ function selectedFlight() {
     }
     if (flightOption == 2) {
         getFlightsFromOrigins();
+    }
+    if (flightOption ==3) {
+        getFlightsByManufacturer();
     }
     if (flightOption == 4) {
         getTopTenDestinations();

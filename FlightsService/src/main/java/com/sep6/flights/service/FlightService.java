@@ -2,9 +2,11 @@ package com.sep6.flights.service;
 
 import com.sep6.flights.model.flight.FlightDestination;
 import com.sep6.flights.model.flight.FlightsCountByMonth;
+import com.sep6.flights.model.flight.FlightsManufacturer;
 import com.sep6.flights.repository.flight.FlightDestinationRepository;
 import com.sep6.flights.repository.flight.FlightRepository;
 import com.sep6.flights.repository.flight.FlightsCountByMonthRepository;
+import com.sep6.flights.repository.flight.FlightsManufacturerRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,14 +19,14 @@ import java.util.List;
 @RequestMapping("/flights")
 public class FlightService {
 
-    private final FlightRepository flightRepository;
     private final FlightsCountByMonthRepository flightsCountByMonthRepository;
     private final FlightDestinationRepository flightDestinationRepository;
+    private final FlightsManufacturerRepository flightsManufacturerRepository;
 
-    public FlightService(FlightRepository flightRepository, FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository) {
-        this.flightRepository = flightRepository;
+    public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository) {
         this.flightsCountByMonthRepository = flightsCountByMonthRepository;
         this.flightDestinationRepository = flightDestinationRepository;
+        this.flightsManufacturerRepository = flightsManufacturerRepository;
     }
 
     @GetMapping("/getTotalNumberOfFlights")
@@ -52,8 +54,9 @@ public class FlightService {
         return flightDestinationRepository.getNoOfFlightsByDestination(PageRequest.of(0,10));
     }
 
-    @GetMapping("/deployTest")
-    public String test() {
-        return "Hello! You have deployed it successfully :D";
+    @GetMapping("/getFlightsByManufacturer")
+    public List<FlightsManufacturer> getFlightsByManufacturer() {
+        return flightsManufacturerRepository.getNoOfFlightsByManufacturer();
     }
+
 }
