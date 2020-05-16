@@ -1,3 +1,5 @@
+const URL = 'https://flights-service-buki55n7ba-lz.a.run.app/weather';
+
 function selectedWeather() {
     const option = document.getElementById("weather");
     switch (option.selectedIndex) {
@@ -11,7 +13,7 @@ function selectedWeather() {
 }
 
 function displayGraphNoOfObservationsPerOrigin() {
-    fetch('http://localhost:8080/weather/getNumberOfWeatherObservationsByOrigin')
+    fetch(URL + '/getNumberOfWeatherObservationsByOrigin')
         .then(status)
         .then(json)
         .then(function (data) {
