@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "weather")
@@ -32,6 +31,6 @@ public class Weather {
     private int precip;
     private double pressure;
     private int visib;
-    private Date time_hour;
+    private LocalDateTime time_hour;
 
 }
