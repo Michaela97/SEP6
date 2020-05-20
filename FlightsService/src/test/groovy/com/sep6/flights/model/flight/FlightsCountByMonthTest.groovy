@@ -26,8 +26,11 @@ class FlightsCountByMonthTest extends Specification {
     }
 
     def "test get count from JFK"() {
+
+        String origin = "JFK"
+
         when:
-        def result = repository.getCountFromJFK()
+        def result = repository.getCountFromOrigin(origin)
 
         then:
         assert !result.isEmpty()
@@ -36,8 +39,11 @@ class FlightsCountByMonthTest extends Specification {
     }
 
     def "test get count from LGA"() {
+
+        String origin = "LGA"
+
         when:
-        def result = repository.getCountFromLGA()
+        def result = repository.getCountFromOrigin(origin)
 
         then:
         assert !result.isEmpty()
@@ -46,8 +52,11 @@ class FlightsCountByMonthTest extends Specification {
     }
 
     def "test get count from EWR"() {
+
+        String origin = "EWR"
+
         when:
-        def result = repository.getCountFromEWR()
+        def result = repository.getCountFromOrigin(origin)
 
         then:
         assert !result.isEmpty()

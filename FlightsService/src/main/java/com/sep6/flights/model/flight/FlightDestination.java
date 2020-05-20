@@ -15,6 +15,7 @@ import javax.persistence.Id;
 @NamedQuery(name = "FlightDestination.getNoOfFlightsByDestination",
         query = "select new com.sep6.flights.model.flight.FlightDestination( f.dest, count(f.id) as countOfFlights) " +
                 "from Flight as f  " +
+                "where f.origin = :origin " +
                 "group by f.dest " +
                 "order by countOfFlights DESC")
 public class FlightDestination {

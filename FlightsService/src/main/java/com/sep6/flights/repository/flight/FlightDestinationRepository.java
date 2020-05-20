@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface FlightDestinationRepository extends JpaRepository<FlightDestination, String> {
 
-    List<FlightDestination> getNoOfFlightsByDestination(Pageable pageable);
+    List<FlightDestination> getNoOfFlightsByDestination(String origin, Pageable pageable);
 
 
 }

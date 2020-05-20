@@ -36,22 +36,32 @@ public class FlightService {
 
     @GetMapping("/getTotalNumberOfFlightsFromJFK")
     public List<FlightsCountByMonth> getTotalNumberOfFlightsFromJFK() {
-        return flightsCountByMonthRepository.getCountFromJFK();
+        return flightsCountByMonthRepository.getCountFromOrigin("JFK");
     }
 
     @GetMapping("/getTotalNumberOfFlightsFromLGA")
     public List<FlightsCountByMonth> getTotalNumberOfFlightsFromLGA() {
-        return flightsCountByMonthRepository.getCountFromLGA();
+        return flightsCountByMonthRepository.getCountFromOrigin("LGA");
     }
 
     @GetMapping("/getTotalNumberOfFlightsFromEWR")
     public List<FlightsCountByMonth> getTotalNumberOfFlightsFromEWR() {
-        return flightsCountByMonthRepository.getCountFromEWR();
+        return flightsCountByMonthRepository.getCountFromOrigin("EWR");
     }
 
-    @GetMapping("/getTopTenDestinations")
-    public List<FlightDestination> getTopTenDestinations() {
-        return flightDestinationRepository.getNoOfFlightsByDestination(PageRequest.of(0,10));
+    @GetMapping("/getTopTenDestinationsFromJFK")
+    public List<FlightDestination> getTopTenDestinationsFromJFK() {
+        return flightDestinationRepository.getNoOfFlightsByDestination("JFK", PageRequest.of(0,10));
+    }
+
+    @GetMapping("/getTopTenDestinationsFromLGA")
+    public List<FlightDestination> getTopTenDestinationsFromLGA() {
+        return flightDestinationRepository.getNoOfFlightsByDestination("LGA", PageRequest.of(0,10));
+    }
+
+    @GetMapping("/getTopTenDestinationsFromEWR")
+    public List<FlightDestination> getTopTenDestinationsFromEWR() {
+        return flightDestinationRepository.getNoOfFlightsByDestination("EWR", PageRequest.of(0,10));
     }
 
     @GetMapping("/getFlightsByManufacturer")

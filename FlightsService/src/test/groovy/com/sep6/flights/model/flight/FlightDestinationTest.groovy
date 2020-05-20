@@ -15,9 +15,37 @@ class FlightDestinationTest extends Specification {
     @Autowired(required=true)
     private FlightDestinationRepository repository
 
-    def "test get count"() {
+
+    def "test get top destination from JFK"() {
+
+        String origin = "JFK"
+
         when:
-        def result = repository.getNoOfFlightsByDestination(PageRequest.of(0,10))
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
+
+        then:
+        assert !result.isEmpty()
+        assert  result.size() == 10
+    }
+
+    def "test get top destination from EWR"() {
+
+        String origin = "EWR"
+
+        when:
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
+
+        then:
+        assert !result.isEmpty()
+        assert  result.size() == 10
+    }
+
+    def "test get top destination from LGA"() {
+
+        String origin = "LGA"
+
+        when:
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
 
         then:
         assert !result.isEmpty()
