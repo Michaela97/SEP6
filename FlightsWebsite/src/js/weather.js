@@ -7,6 +7,9 @@ function selectedWeather() {
         case 3:
             displayGraphTemperaturesAtJFK();
             break;
+        case 4:
+            displayGraphDailyMeanPerOrigin();
+            break;
         case 5:
             displayGraphNoOfObservationsPerOrigin();
             break;
@@ -55,6 +58,28 @@ function displayGraphTemperaturesAtJFK() {
     });
 }
 
+function displayGraphDailyMeanPerOrigin() {
+    fetch(URL+'/getDailyTemperatureMeanByOrigin')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            if(data != null && data.length > 0) {
+                let processedData = [];
+                for (let row of data) {
+                    if(processedData[row.origin] == null) {
+                        processedData[row.origin] = [];
+                    }
+                    processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
+                }
+                showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData);
+            } else {
+                return Promise.reject(new Error("No data"));
+            }
+        }).catch(function (error) {
+        console.error('Request failed', error);
+    });
+}
+
 function status(response) {
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response)
@@ -92,9 +117,9 @@ function showColumnGraph(title, titleY, titleX, data) {
 
 function showScatterGraph(title, titleY, data) {
     let colors = [
-        {legend:"rgba(250,300,0,0.4)",marker:"rgba(250,300,0,0.2)"},
-        {legend:"rgba(120,10,158,0.4)",marker:"rgba(120,10,158,0.2)"},
-        {legend:"rgba(0,148,158,0.4)",marker:"rgba(0,148,158,0.2)"}];
+        {legend:"rgba(250,300,0,0.8)",marker:"rgba(250,300,0,0.2)"},
+        {legend:"rgba(120,10,158,0.8)",marker:"rgba(120,10,158,0.2)"},
+        {legend:"rgba(0,148,158,0.8)",marker:"rgba(0,148,158,0.2)"}];
 
     let minX = null;
     let maxX = null;
@@ -110,12 +135,14 @@ function showScatterGraph(title, titleY, data) {
         let colorSet = colors.pop();
         graphData.push({
             type: "scatter",
-            toolTipContent: "<span style=\"color:colorSet.legend\n \"><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b></span> {y} °C",
             name: origin,
             showInLegend: true,
             legendMarkerColor: colorSet.legend,
-            markerColor: Object.keys(data).length > 1 ? colorSet.legend : colorSet.marker,
-            markerSize: 6,
+            toolTipContent: "<span><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b> {y} °C",
+            markerSize: 5,
+            markerBorderColor: colorSet.legend,
+            markerColor: "transparent",
+            markerBorderThickness: 1,
             dataPoints: data[origin]
         });
     }
@@ -129,7 +156,7 @@ function showScatterGraph(title, titleY, data) {
             text: title
         },
         axisY:{
-            title: titleY,
+            title: titleY
         },
         axisX:{
             minimum: minX,

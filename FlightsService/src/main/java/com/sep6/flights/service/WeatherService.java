@@ -31,4 +31,9 @@ public class WeatherService {
     public List<TemperaturesByOrigin> getTemperaturesAtJFK() {
         return temperaturesByOriginRepository.getTemperaturesAtOrigin("JFK");
     }
+
+    @GetMapping("/getDailyTemperatureMeanByOrigin")
+    public List<TemperaturesByOrigin> getDailyTemperatureMeanPerOrigin() {
+        return temperaturesByOriginRepository.getDailyMeanTemperaturesPerOrigin();
+    }
 }
