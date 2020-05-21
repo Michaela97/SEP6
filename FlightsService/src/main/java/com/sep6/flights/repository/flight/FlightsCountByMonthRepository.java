@@ -10,5 +10,6 @@ import java.util.List;
 public interface FlightsCountByMonthRepository extends JpaRepository<FlightsCountByMonth, Integer> {
 
     List<FlightsCountByMonth> getCount();
+    List<FlightsCountByMonth> getCountFromOrigin(String origin);
 
 }
