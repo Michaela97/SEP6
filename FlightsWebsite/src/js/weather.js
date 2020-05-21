@@ -4,11 +4,11 @@ const URL = 'https://flights-service-buki55n7ba-lz.a.run.app/weather';
 function selectedWeather() {
     const option = document.getElementById("weather");
     switch (option.selectedIndex) {
+        case 1:
+            displayGraphDailyMeanPerOrigin();
+            break;
         case 3:
             displayGraphTemperaturesAtJFK();
-            break;
-        case 4:
-            displayGraphDailyMeanPerOrigin();
             break;
         case 5:
             displayGraphNoOfObservationsPerOrigin();
