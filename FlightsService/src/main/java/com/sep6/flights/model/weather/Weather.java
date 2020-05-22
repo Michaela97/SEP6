@@ -21,6 +21,7 @@ public class Weather {
     private String origin;
     private int year;
     private int month;
+    private int day;
     private int hour;
     private double temp;
     private double dewp;
