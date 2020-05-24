@@ -7,6 +7,9 @@ function selectedWeather() {
         case 1:
             displayGraphDailyMeanPerOrigin();
             break;
+        case 2:
+            displayGraphDailyMeanAtJFK();
+            break;
         case 3:
             displayGraphTemperaturesAtJFK();
             break;
@@ -72,6 +75,25 @@ function displayGraphDailyMeanPerOrigin() {
                     processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
                 }
                 showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData);
+            } else {
+                return Promise.reject(new Error("No data"));
+            }
+        }).catch(function (error) {
+        console.error('Request failed', error);
+    });
+}
+
+function displayGraphDailyMeanAtJFK() {
+    fetch(URL+'/getDailyTemperatureMeanAtJFK')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            if(data != null && data.length > 0) {
+                let processedData = [];
+                for (let row of data) {
+                    processedData.push({x:new Date(row.timestamp),y:row.temperature});
+                }
+                showLineGraph("Daily mean temperature at JFK","Daily mean in Celsius",processedData);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -163,6 +185,31 @@ function showScatterGraph(title, titleY, data) {
             maximum: maxX
         },
         data: graphData
+    });
+    chart.render();
+}
+
+function showLineGraph(title, titleY, data) {
+    let chart = new CanvasJS.Chart("chartContainer", {
+        theme: "light2",
+        animationEnabled: true,
+        title:{
+            text: title
+        },
+        axisY:{
+            title: titleY
+        },
+        axisX:{
+            minimum: new Date(data[0].x).setMonth(data[0].x.getMonth()-1),
+            maximum: new Date(data[data.length-1].x).setMonth(data[data.length-1].x.getMonth()+1)
+        },
+        data:[{
+            type: "spline",
+            name: origin,
+            yValueFormatString: "0.00",
+            toolTipContent: "<span><b>Origin: JFK</b></span><br/><b> Date:</b> {x} <br/><b> Temperature:</b> {y} °C",
+            dataPoints: data
+        }]
     });
     chart.render();
 }

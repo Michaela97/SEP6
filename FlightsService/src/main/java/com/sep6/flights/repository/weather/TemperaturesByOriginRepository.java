@@ -12,4 +12,6 @@ public interface TemperaturesByOriginRepository extends JpaRepository<Temperatur
     List<TemperaturesByOrigin> getTemperaturesAtOrigin(String origin);
 
     List<TemperaturesByOrigin> getDailyMeanTemperaturesPerOrigin();
+
+    List<TemperaturesByOrigin> getDailyTemperatureMeanAtOrigin(String origin);
 }
