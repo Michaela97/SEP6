@@ -23,6 +23,12 @@ import java.time.LocalDateTime;
                 "from Weather as w " +
                 "group by (w.origin,w.year,w.month,w.day) " +
                 "order by (w.origin,w.year,w.month,w.day)")
+@NamedQuery(name = "TemperaturesByOrigin.getDailyTemperatureMeanAtOrigin",
+        query = "select new com.sep6.flights.model.weather.TemperaturesByOrigin(w.origin,w.year,w.month,w.day,((avg(w.temp)-32)*5/9)) " +
+                "from Weather w " +
+                "where w.origin = :origin " +
+                "group by (w.origin,w.year,w.month,w.day)" +
+                "order by (w.origin,w.year,w.month,w.day)")
 
 public class TemperaturesByOrigin {
 

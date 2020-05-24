@@ -17,6 +17,8 @@ public class WeatherService {
     private final WeatherObservationsByOriginRepository weatherObservationsByOriginRepository;
     private final TemperaturesByOriginRepository temperaturesByOriginRepository;
 
+    private final String ORIGIN_JFK = "JFK";
+
     public WeatherService(WeatherObservationsByOriginRepository weatherObservationsByOriginRepository,TemperaturesByOriginRepository temperaturesByOriginRepository) {
         this.weatherObservationsByOriginRepository = weatherObservationsByOriginRepository;
         this.temperaturesByOriginRepository = temperaturesByOriginRepository;
@@ -29,11 +31,16 @@ public class WeatherService {
 
     @GetMapping("/getTemperaturesAtJFK")
     public List<TemperaturesByOrigin> getTemperaturesAtJFK() {
-        return temperaturesByOriginRepository.getTemperaturesAtOrigin("JFK");
+        return temperaturesByOriginRepository.getTemperaturesAtOrigin(ORIGIN_JFK);
     }
 
     @GetMapping("/getDailyTemperatureMeanByOrigin")
     public List<TemperaturesByOrigin> getDailyTemperatureMeanPerOrigin() {
         return temperaturesByOriginRepository.getDailyMeanTemperaturesPerOrigin();
+    }
+
+    @GetMapping("/getDailyTemperatureMeanAtJFK")
+    public List<TemperaturesByOrigin> getDailyTemperatureMeanAtJFK() {
+        return temperaturesByOriginRepository.getDailyTemperatureMeanAtOrigin(ORIGIN_JFK);
     }
 }
