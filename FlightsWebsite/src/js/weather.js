@@ -49,7 +49,7 @@ function displayGraphTemperaturesAtJFK() {
                     }
                     processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
                 }
-                showScatterGraph("Temperatures at JFK","Temperature in Celsius",processedData);
+                showScatterGraph("Temperatures at JFK","Temperature in Celsius",processedData,false);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -71,7 +71,7 @@ function displayGraphDailyMeanPerOrigin() {
                     }
                     processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
                 }
-                showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData);
+                showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData,true);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -115,7 +115,7 @@ function showColumnGraph(title, titleY, titleX, data) {
     chart.render();
 }
 
-function showScatterGraph(title, titleY, data) {
+function showScatterGraph(title, titleY, data, hasMeanValues) {
     let colors = [
         {legend:"rgba(250,300,0,0.8)",marker:"rgba(250,300,0,0.2)"},
         {legend:"rgba(120,10,158,0.8)",marker:"rgba(120,10,158,0.2)"},
@@ -138,6 +138,8 @@ function showScatterGraph(title, titleY, data) {
             name: origin,
             showInLegend: true,
             legendMarkerColor: colorSet.legend,
+            xValueFormatString: hasMeanValues ? "DD MMM YY" : "DD MMM YY (h TT)",
+            yValueFormatString: "0.00",
             toolTipContent: "<span><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b> {y} °C",
             markerSize: 5,
             markerBorderColor: colorSet.legend,
