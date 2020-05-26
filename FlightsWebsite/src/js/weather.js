@@ -1,6 +1,12 @@
 function selectedWeather() {
     const option = document.getElementById("weather");
     switch (option.selectedIndex) {
+        case 1:
+            displayGraphDailyMeanPerOrigin();
+            break;
+        case 2:
+            displayGraphDailyMeanAtJFK();
+            break;
         case 3:
             displayGraphTemperaturesAtJFK();
             break;
@@ -43,6 +49,48 @@ function displayGraphTemperaturesAtJFK() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
+                showScatterGraph("Temperatures at JFK","Temperature in Celsius",processedData,false);
+            } else {
+                return Promise.reject(new Error("No data"));
+            }
+        }).catch(function (error) {
+        console.error('Request failed', error);
+    });
+}
+
+function displayGraphDailyMeanPerOrigin() {
+    fetch(URL+'/getDailyTemperatureMeanByOrigin')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            if(data != null && data.length > 0) {
+                let processedData = [];
+                for (let row of data) {
+                    if(processedData[row.origin] == null) {
+                        processedData[row.origin] = [];
+                    }
+                    processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
+                }
+                showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData,true);
+            } else {
+                return Promise.reject(new Error("No data"));
+            }
+        }).catch(function (error) {
+        console.error('Request failed', error);
+    });
+}
+
+function displayGraphDailyMeanAtJFK() {
+    fetch(URL+'/getDailyTemperatureMeanAtJFK')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            if(data != null && data.length > 0) {
+                let processedData = [];
+                for (let row of data) {
+                    processedData.push({x:new Date(row.timestamp),y:row.temperature});
+                }
+                showLineGraph("Daily mean temperature at JFK","Daily mean in Celsius",processedData);
                 showScatterGraph("Temperatures at JFK", "Temperature in Celsius", processedData);
             } else {
                 return Promise.reject(new Error("No data"));
@@ -75,11 +123,11 @@ function showColumnGraph(title, titleY, titleX, data) {
     chart.render();
 }
 
-function showScatterGraph(title, titleY, data) {
+function showScatterGraph(title, titleY, data, hasMeanValues) {
     let colors = [
-        {legend: "rgba(250,300,0,0.4)", marker: "rgba(250,300,0,0.2)"},
-        {legend: "rgba(120,10,158,0.4)", marker: "rgba(120,10,158,0.2)"},
-        {legend: "rgba(0,148,158,0.4)", marker: "rgba(0,148,158,0.2)"}];
+        {legend:"rgba(250,300,0,0.8)",marker:"rgba(250,300,0,0.2)"},
+        {legend:"rgba(120,10,158,0.8)",marker:"rgba(120,10,158,0.2)"},
+        {legend:"rgba(0,148,158,0.8)",marker:"rgba(0,148,158,0.2)"}];
 
     let minX = null;
     let maxX = null;
@@ -95,12 +143,16 @@ function showScatterGraph(title, titleY, data) {
         let colorSet = colors.pop();
         graphData.push({
             type: "scatter",
-            toolTipContent: "<span style=\"color:colorSet.legend\n \"><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b></span> {y} °C",
             name: origin,
             showInLegend: true,
             legendMarkerColor: colorSet.legend,
-            markerColor: Object.keys(data).length > 1 ? colorSet.legend : colorSet.marker,
-            markerSize: 6,
+            xValueFormatString: hasMeanValues ? "DD MMM YY" : "DD MMM YY (h TT)",
+            yValueFormatString: "0.00",
+            toolTipContent: "<span><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b> {y} °C",
+            markerSize: 5,
+            markerBorderColor: colorSet.legend,
+            markerColor: "transparent",
+            markerBorderThickness: 1,
             dataPoints: data[origin]
         });
     }
@@ -114,13 +166,38 @@ function showScatterGraph(title, titleY, data) {
             text: title
         },
         axisY: {
-            title: titleY,
+            title: titleY
         },
         axisX: {
             minimum: minX,
             maximum: maxX
         },
         data: graphData
+    });
+    chart.render();
+}
+
+function showLineGraph(title, titleY, data) {
+    let chart = new CanvasJS.Chart("chartContainer", {
+        theme: "light2",
+        animationEnabled: true,
+        title:{
+            text: title
+        },
+        axisY:{
+            title: titleY
+        },
+        axisX:{
+            minimum: new Date(data[0].x).setMonth(data[0].x.getMonth()-1),
+            maximum: new Date(data[data.length-1].x).setMonth(data[data.length-1].x.getMonth()+1)
+        },
+        data:[{
+            type: "spline",
+            name: origin,
+            yValueFormatString: "0.00",
+            toolTipContent: "<span><b>Origin: JFK</b></span><br/><b> Date:</b> {x} <br/><b> Temperature:</b> {y} °C",
+            dataPoints: data
+        }]
     });
     chart.render();
 }
