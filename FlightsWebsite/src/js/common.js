@@ -146,8 +146,8 @@ function convertMonth(month) {
 function convertMinute(minuteValue) {
     let decimalValue = Math.abs(Math.round(((minuteValue % 1) * 100) / 100 * 60));
     let wholePart = minuteValue | 0;
-
-    return wholePart + ":" + padDigits(decimalValue, 2);
+    let minus = minuteValue < 0 ? '-' : '';
+    return minus + wholePart + ":" + padDigits(decimalValue, 2);
 }
 
 function padDigits(number, digits) {
