@@ -13,11 +13,10 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Data
 @NamedQuery(name = "CountOfAirbusPlanesByModel.countAirbusPlanesByModel",
-        query = """
-                select new com.sep6.flights.model.plane.CountOfAirbusPlanesByModel( p.model, count(*)) 
-                from Plane p 
-                where p.manufacturer = 'AIRBUS INDUSTRIE' 
-                group by p.model""")
+        query = "select new com.sep6.flights.model.plane.CountOfAirbusPlanesByModel( p.model, count(*)) " +
+                "from Plane p " +
+                "where p.manufacturer = 'AIRBUS INDUSTRIE' " +
+                "group by p.model")
 public class CountOfAirbusPlanesByModel {
 
     @Id

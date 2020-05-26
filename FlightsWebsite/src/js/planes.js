@@ -5,10 +5,10 @@ function selectedPlanes() {
         case 0:
             break;
         case 1:
-            console.log("Planes 1 selected")
-            getCountOfAirbusPlanesByModel()
+            getCountOfAirbusPlanesByModel();
             break;
         case 2:
+            manufacturersWithPlanes();
             break;
         case 3:
             break;
@@ -50,6 +50,49 @@ function showNumberOfPlanes(data) {
         },
         axisX: {
             title: "Model",
+            interval: 1
+        },
+        data: [{
+            type: "column",
+            yValueFormatString: "# planes",
+            legendMarkerColor: "grey",
+            dataPoints: data
+        }]
+    });
+    chart.render();
+}
+
+function manufacturersWithPlanes() {
+    fetch(planesUrl + '/getManufacturersWithMoreThanTwoHundredPlanes')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+
+            data.forEach(element => {
+                    result.push({y: element.countOfPlanes, label: element.manufacturer});
+                }
+            )
+            showManufacturersWithPlanes(result)
+
+        }).catch(function (error) {
+        console.log('Request failed', error);
+    });
+}
+
+function showManufacturersWithPlanes(data) {
+    let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Manufacturers that have more than 200 planes"
+        },
+        axisY: {
+            title: "Number of planes",
+        },
+        axisX: {
+            title: "Manufacturer",
             interval: 1
         },
         data: [{
