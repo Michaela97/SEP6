@@ -1,22 +1,28 @@
+function selectedFlight() {
+    const option = document.getElementById("flights");
+    let flightOption = option.options[option.selectedIndex].value;
 
-const url = 'https://flights-service-buki55n7ba-lz.a.run.app/flights/';
-const localUrl = 'http://localhost:8080/flights/';
+    switch(option.selectedIndex) {
+        case 1:
+            getTotalFlights();
+            break;
+        case 2:
+            getFlightsFromOrigins();
+            break;
+        case 3:
+            getFlightsByManufacturer();
+            break;
+        case 4:
+            getTopTenDestinations();
+            break;
+        default:
+            console.log(`Selected unhandled value ${option.selectedIndex}`)
 
-let percentageChart = document.getElementById("percentageChartContainer");
-let chartContainer = document.getElementById("chartContainer");
-let stackedChartContainer = document.getElementById("stackedChartContainer");
-
-init();
-
-function init(){
-    toggleGraph(true, percentageChart);
-    toggleGraph(true, chartContainer);
-    toggleGraph(true, stackedChartContainer);
+    }
 }
 
 function getTotalFlights() {
-
-    fetch(url + 'getTotalNumberOfFlights')
+    fetch(flightsUrl + '/getTotalNumberOfFlights')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -35,12 +41,11 @@ function getTotalFlights() {
 }
 
 async function getFlightsFromOrigins() {
-
     let resultLGA = [];
     let resultJFK = [];
     let resultEWR = [];
 
-    await fetch(url + 'getTotalNumberOfFlightsFromLGA')
+    let promiseLGA =  fetch(flightsUrl + '/getTotalNumberOfFlightsFromLGA')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -49,13 +54,12 @@ async function getFlightsFromOrigins() {
                     resultLGA.push({y: element.countOfFlights, label: convertMonth(element.month)});
                 }
             )
-            console.log(resultLGA)
 
         }).catch(function (error) {
-        console.log('Request failed', error);
-    });
+            console.log('Request failed', error);
+        });
 
-    await fetch(url + 'getTotalNumberOfFlightsFromJFK')
+    let promiseJFK =  fetch(flightsUrl + '/getTotalNumberOfFlightsFromJFK')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -66,10 +70,10 @@ async function getFlightsFromOrigins() {
             )
 
         }).catch(function (error) {
-        console.log('Request failed', error);
-    });
+            console.log('Request failed', error);
+        });
 
-    await fetch(url + 'getTotalNumberOfFlightsFromEWR')
+    let promiseEWR = fetch(flightsUrl + '/getTotalNumberOfFlightsFromEWR')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -79,8 +83,13 @@ async function getFlightsFromOrigins() {
                 }
             )
         }).catch(function (error) {
-        console.log('Request failed', error);
-    });
+            console.log('Request failed', error);
+        });
+
+    // Make calls asynchronously and await them here, so that they actually are async, not sync
+    await promiseLGA;
+    await promiseJFK;
+    await promiseEWR;
 
     showFlightsFromOrigins(resultLGA, resultJFK, resultEWR);
     showFlightsFromOriginsPercentage(resultLGA, resultJFK, resultEWR);
@@ -88,26 +97,25 @@ async function getFlightsFromOrigins() {
 }
 
 async function getTopTenDestinations() {
-
     let resultLGA = [];
     let resultJFK = [];
     let resultEWR = [];
 
-    await fetch(url + 'getTopTenDestinationsFromLGA')
+    let promiseLGA =  fetch(flightsUrl + '/getTopTenDestinationsFromLGA')
         .then(status)
         .then(json)
         .then(function (data) {
 
             data.forEach(element => {
-                resultLGA.push({y: element.countOfFlights, label: element.destination});
+                    resultLGA.push({y: element.countOfFlights, label: element.destination});
                 }
             )
 
         }).catch(function (error) {
-        console.log('Request failed', error);
-    });
+            console.log('Request failed', error);
+        });
 
-    await fetch(url + 'getTopTenDestinationsFromJFK')
+    let promiseJFK = fetch(flightsUrl + '/getTopTenDestinationsFromJFK')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -121,7 +129,7 @@ async function getTopTenDestinations() {
             console.log('Request failed', error);
         });
 
-    await fetch(url  + 'getTopTenDestinationsFromEWR')
+    let promiseEWR = fetch(flightsUrl + '/getTopTenDestinationsFromEWR')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -135,12 +143,15 @@ async function getTopTenDestinations() {
             console.log('Request failed', error);
         });
 
+    await promiseLGA;
+    await promiseJFK;
+    await promiseEWR;
+
     showTopDestinations(resultLGA, resultJFK, resultEWR);
 }
 
 function getFlightsByManufacturer() {
-
-    fetch(url + 'getFlightsByManufacturer')
+    fetch(flightsUrl + '/getFlightsByManufacturer')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -157,21 +168,7 @@ function getFlightsByManufacturer() {
     });
 }
 
-function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
-    } else {
-        console.log("response code: " + response.status)
-        return Promise.reject(new Error(response.statusText))
-    }
-}
-
-function json(response) {
-    return response.json()
-}
-
 function showTotalFlights(data) {
-
     let chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
@@ -197,11 +194,10 @@ function showTotalFlights(data) {
 }
 
 function showFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
-
     let chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
-        title:{
+        title: {
             text: "Total number of flights per month from three origins"
         },
         axisY: {
@@ -218,7 +214,7 @@ function showFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
             shared: true
         },
         legend: {
-            cursor:"pointer",
+            cursor: "pointer",
         },
         data: [{
             type: "column",
@@ -226,7 +222,7 @@ function showFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
             yValueFormatString: "#,##0' flights'",
             legendText: "origin EWR",
             showInLegend: true,
-            dataPoints:dataEWR
+            dataPoints: dataEWR
         },
             {
                 type: "column",
@@ -235,7 +231,7 @@ function showFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
                 axisYType: "secondary",
                 yValueFormatString: "#,##0' flights'",
                 showInLegend: true,
-                dataPoints:dataJFK
+                dataPoints: dataJFK
             },
             {
                 type: "column",
@@ -244,18 +240,17 @@ function showFlightsFromOrigins(dataLGA, dataJFK, dataEWR) {
                 axisYType: "secondary",
                 yValueFormatString: "#,##0' flights'",
                 showInLegend: true,
-                dataPoints:dataLGA
+                dataPoints: dataLGA
             }]
     });
     chart.render();
 }
 
 function showFlightsFromOriginsPercentage(dataLGA, dataJFK, dataEWR) {
-
-    let chart = new CanvasJS.Chart("percentageChartContainer", {
+    let chart = new CanvasJS.Chart("chartContainer3", {
         animationEnabled: true,
         theme: "light2",
-        title:{
+        title: {
             text: "Total number of flights per month - stacked percentage"
         },
         axisX: {
@@ -294,17 +289,16 @@ function showFlightsFromOriginsPercentage(dataLGA, dataJFK, dataEWR) {
 }
 
 function showFlightsFromOriginsStacked(dataLGA, dataJFK, dataEWR) {
-
-    let chart = new CanvasJS.Chart("stackedChartContainer", {
+    let chart = new CanvasJS.Chart("chartContainer2", {
         animationEnabled: true,
         theme: "light2",
-        title:{
+        title: {
             text: "Total number of flights per month - stacked",
         },
         axisX: {
             interval: 1,
         },
-        axisY:{
+        axisY: {
             interval: 2500,
             title: "Total number of flights",
         },
@@ -323,7 +317,7 @@ function showFlightsFromOriginsStacked(dataLGA, dataJFK, dataEWR) {
                 showInLegend: true,
                 yValueFormatString: "#,##0' flights'",
                 name: "origin LGA",
-                dataPoints:dataLGA
+                dataPoints: dataLGA
             },
             {
                 type: "stackedColumn",
@@ -337,7 +331,6 @@ function showFlightsFromOriginsStacked(dataLGA, dataJFK, dataEWR) {
 }
 
 function showFlightsByManufacturer(data) {
-
     let chart = new CanvasJS.Chart("chartContainer", {
         theme: "light2",
         animationEnabled: true,
@@ -360,11 +353,10 @@ function showFlightsByManufacturer(data) {
 }
 
 function showTopDestinations(dataLGA, dataJFK, dataEWR) {
-
     let chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
-        title:{
+        title: {
             text: "Top 10 Destinations"
         },
         axisY: {
@@ -382,7 +374,7 @@ function showTopDestinations(dataLGA, dataJFK, dataEWR) {
             shared: true
         },
         legend: {
-            cursor:"pointer",
+            cursor: "pointer",
         },
         data: [{
             type: "column",
@@ -390,7 +382,7 @@ function showTopDestinations(dataLGA, dataJFK, dataEWR) {
             legendText: "origin LGA",
             yValueFormatString: "#,##0' flights'",
             showInLegend: true,
-            dataPoints:dataLGA
+            dataPoints: dataLGA
         },
 
             {
@@ -400,7 +392,7 @@ function showTopDestinations(dataLGA, dataJFK, dataEWR) {
                 axisYType: "secondary",
                 yValueFormatString: "#,##0' flights'",
                 showInLegend: true,
-                dataPoints:dataJFK
+                dataPoints: dataJFK
             },
             {
                 type: "column",
@@ -409,88 +401,12 @@ function showTopDestinations(dataLGA, dataJFK, dataEWR) {
                 axisYType: "secondary",
                 yValueFormatString: "#,##0' flights'",
                 showInLegend: true,
-                dataPoints:dataEWR
+                dataPoints: dataEWR
             }]
     });
     chart.render();
 }
 
-function selectedFlight() {
-
-    const option = document.getElementById("flights");
-    let flightOption = option.options[option.selectedIndex].value;
-
-    if (flightOption == 0) {
-        init();
-    }
-    if (flightOption == 1) {
-        toggleGraph(true, percentageChart);
-        toggleGraph(false, chartContainer);
-        toggleGraph(true, stackedChartContainer);
-        getTotalFlights();
-    }
-    if (flightOption == 2) {
-        toggleGraph(false, percentageChart);
-        toggleGraph(false, chartContainer);
-        toggleGraph(false, stackedChartContainer);
-        getFlightsFromOrigins();
-    }
-    if (flightOption ==3) {
-        toggleGraph(true, percentageChart);
-        toggleGraph(false, chartContainer);
-        toggleGraph(true, stackedChartContainer);
-        getFlightsByManufacturer();
-    }
-    if (flightOption == 4) {
-        toggleGraph(true, percentageChart);
-        toggleGraph(false, chartContainer);
-        toggleGraph(true, stackedChartContainer);
-        getTopTenDestinations();
-    }
-}
-
-function convertMonth(month) {
-
-    switch (month) {
-        case 1:
-            return "January"
-        case 2:
-            return "February"
-        case 3:
-            return "March"
-        case 4:
-            return "April"
-        case 5:
-            return "May"
-        case 6:
-            return "June"
-        case 7:
-            return "July"
-        case 8:
-            return "August"
-        case 9:
-            return "September"
-        case 10:
-            return "October"
-        case 11:
-            return "November"
-        case 12:
-            return "December"
-        default:
-            return "This is not a valid month"
-    }
-}
-
-function toggleGraph(value, chart) {
-
-    if (value === true) {
-        //hide chart
-        chart.style.display = "none";
-    } else {
-        //show chart
-        chart.style.display = "block";
-    }
-}
 
 
 
