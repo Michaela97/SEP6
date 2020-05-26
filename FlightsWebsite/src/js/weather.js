@@ -49,7 +49,7 @@ function displayGraphTemperaturesAtJFK() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showScatterGraph("Temperatures at JFK","Temperature in Celsius",processedData,false);
+                showScatterGraph("Temperatures at JFK", "Temperature in Celsius", processedData, false);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -59,19 +59,19 @@ function displayGraphTemperaturesAtJFK() {
 }
 
 function displayGraphDailyMeanPerOrigin() {
-    fetch(URL+'/getDailyTemperatureMeanByOrigin')
+    fetch(weatherUrl + '/getDailyTemperatureMeanByOrigin')
         .then(status)
         .then(json)
         .then(function (data) {
-            if(data != null && data.length > 0) {
+            if (data != null && data.length > 0) {
                 let processedData = [];
                 for (let row of data) {
-                    if(processedData[row.origin] == null) {
+                    if (processedData[row.origin] == null) {
                         processedData[row.origin] = [];
                     }
-                    processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
+                    processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showScatterGraph("Daily mean temperature","Daily mean in Celsius",processedData,true);
+                showScatterGraph("Daily mean temperature", "Daily mean in Celsius", processedData, true);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -81,17 +81,16 @@ function displayGraphDailyMeanPerOrigin() {
 }
 
 function displayGraphDailyMeanAtJFK() {
-    fetch(URL+'/getDailyTemperatureMeanAtJFK')
+    fetch(weatherUrl + '/getDailyTemperatureMeanAtJFK')
         .then(status)
         .then(json)
         .then(function (data) {
-            if(data != null && data.length > 0) {
+            if (data != null && data.length > 0) {
                 let processedData = [];
                 for (let row of data) {
-                    processedData.push({x:new Date(row.timestamp),y:row.temperature});
+                    processedData.push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showLineGraph("Daily mean temperature at JFK","Daily mean in Celsius",processedData);
-                showScatterGraph("Temperatures at JFK", "Temperature in Celsius", processedData);
+                showLineGraph("Daily mean temperature at JFK", "Daily mean in Celsius", processedData);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -125,9 +124,9 @@ function showColumnGraph(title, titleY, titleX, data) {
 
 function showScatterGraph(title, titleY, data, hasMeanValues) {
     let colors = [
-        {legend:"rgba(250,300,0,0.8)",marker:"rgba(250,300,0,0.2)"},
-        {legend:"rgba(120,10,158,0.8)",marker:"rgba(120,10,158,0.2)"},
-        {legend:"rgba(0,148,158,0.8)",marker:"rgba(0,148,158,0.2)"}];
+        {legend: "rgba(250,300,0,0.8)", marker: "rgba(250,300,0,0.2)"},
+        {legend: "rgba(120,10,158,0.8)", marker: "rgba(120,10,158,0.2)"},
+        {legend: "rgba(0,148,158,0.8)", marker: "rgba(0,148,158,0.2)"}];
 
     let minX = null;
     let maxX = null;
@@ -181,17 +180,17 @@ function showLineGraph(title, titleY, data) {
     let chart = new CanvasJS.Chart("chartContainer", {
         theme: "light2",
         animationEnabled: true,
-        title:{
+        title: {
             text: title
         },
-        axisY:{
+        axisY: {
             title: titleY
         },
-        axisX:{
-            minimum: new Date(data[0].x).setMonth(data[0].x.getMonth()-1),
-            maximum: new Date(data[data.length-1].x).setMonth(data[data.length-1].x.getMonth()+1)
+        axisX: {
+            minimum: new Date(data[0].x).setMonth(data[0].x.getMonth() - 1),
+            maximum: new Date(data[data.length - 1].x).setMonth(data[data.length - 1].x.getMonth() + 1)
         },
-        data:[{
+        data: [{
             type: "spline",
             name: origin,
             yValueFormatString: "0.00",
