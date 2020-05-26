@@ -1,6 +1,3 @@
-const url = 'https://flights-service-buki55n7ba-lz.a.run.app/planes/';
-// const url = 'http://localhost:8080/planes/';
-
 function selectedPlanes() {
     const option = document.getElementById("planes");
 
@@ -23,7 +20,7 @@ function selectedPlanes() {
 }
 
 function getCountOfAirbusPlanesByModel() {
-    fetch(url + 'countOfAirbusPlanesByModelList')
+    fetch(planesUrl + '/countOfAirbusPlanesByModelList')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -31,7 +28,7 @@ function getCountOfAirbusPlanesByModel() {
             let result = [];
 
             data.forEach(element => {
-                    result.push({y: element.numberOfPlanes, label: element.model });
+                    result.push({y: element.numberOfPlanes, label: element.model});
                 }
             )
             showNumberOfPlanes(result)
@@ -63,17 +60,4 @@ function showNumberOfPlanes(data) {
         }]
     });
     chart.render();
-}
-
-function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
-    } else {
-        console.log("response code: " + response.status)
-        return Promise.reject(new Error(response.statusText))
-    }
-}
-
-function json(response) {
-    return response.json()
 }

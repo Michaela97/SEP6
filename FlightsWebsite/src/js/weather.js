@@ -1,6 +1,3 @@
-const URL = 'https://flights-service-buki55n7ba-lz.a.run.app/weather';
-// const URL = 'http://localhost:8080/weather';
-
 function selectedWeather() {
     const option = document.getElementById("weather");
     switch (option.selectedIndex) {
@@ -16,7 +13,7 @@ function selectedWeather() {
 }
 
 function displayGraphNoOfObservationsPerOrigin() {
-    fetch(URL + '/getNumberOfWeatherObservationsByOrigin')
+    fetch(weatherUrl + '/getNumberOfWeatherObservationsByOrigin')
         .then(status)
         .then(json)
         .then(function (data) {
@@ -34,37 +31,25 @@ function displayGraphNoOfObservationsPerOrigin() {
 }
 
 function displayGraphTemperaturesAtJFK() {
-    fetch(URL+'/getTemperaturesAtJFK')
+    fetch(weatherUrl + '/getTemperaturesAtJFK')
         .then(status)
         .then(json)
         .then(function (data) {
-            if(data != null && data.length > 0) {
+            if (data != null && data.length > 0) {
                 let processedData = [];
                 for (let row of data) {
-                    if(processedData[row.origin] == null) {
+                    if (processedData[row.origin] == null) {
                         processedData[row.origin] = [];
                     }
-                    processedData[row.origin].push({x:new Date(row.timestamp),y:row.temperature});
+                    processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showScatterGraph("Temperatures at JFK","Temperature in Celsius",processedData);
+                showScatterGraph("Temperatures at JFK", "Temperature in Celsius", processedData);
             } else {
                 return Promise.reject(new Error("No data"));
             }
         }).catch(function (error) {
         console.error('Request failed', error);
     });
-}
-
-function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response)
-    } else {
-        return Promise.reject(new Error(response.statusText))
-    }
-}
-
-function json(response) {
-    return response.json()
 }
 
 function showColumnGraph(title, titleY, titleX, data) {
@@ -92,19 +77,19 @@ function showColumnGraph(title, titleY, titleX, data) {
 
 function showScatterGraph(title, titleY, data) {
     let colors = [
-        {legend:"rgba(250,300,0,0.4)",marker:"rgba(250,300,0,0.2)"},
-        {legend:"rgba(120,10,158,0.4)",marker:"rgba(120,10,158,0.2)"},
-        {legend:"rgba(0,148,158,0.4)",marker:"rgba(0,148,158,0.2)"}];
+        {legend: "rgba(250,300,0,0.4)", marker: "rgba(250,300,0,0.2)"},
+        {legend: "rgba(120,10,158,0.4)", marker: "rgba(120,10,158,0.2)"},
+        {legend: "rgba(0,148,158,0.4)", marker: "rgba(0,148,158,0.2)"}];
 
     let minX = null;
     let maxX = null;
     let graphData = [];
-    for(let origin in data){
-        if(minX == null || data[origin][0].x < minX.toString()) {
+    for (let origin in data) {
+        if (minX == null || data[origin][0].x < minX.toString()) {
             minX = new Date(data[origin][0].x);
         }
-        if(maxX == null || data[origin][0].x > maxX.toString()) {
-            maxX = new Date(data[origin][data[origin].length-1].x);
+        if (maxX == null || data[origin][0].x > maxX.toString()) {
+            maxX = new Date(data[origin][data[origin].length - 1].x);
         }
 
         let colorSet = colors.pop();
@@ -119,19 +104,19 @@ function showScatterGraph(title, titleY, data) {
             dataPoints: data[origin]
         });
     }
-    if(minX != null) minX.setMonth(minX.getMonth()-1);
-    if(maxX != null) maxX.setMonth(maxX.getMonth()+1);
+    if (minX != null) minX.setMonth(minX.getMonth() - 1);
+    if (maxX != null) maxX.setMonth(maxX.getMonth() + 1);
 
     let chart = new CanvasJS.Chart("chartContainer", {
         theme: "light2",
         animationEnabled: true,
-        title:{
+        title: {
             text: title
         },
-        axisY:{
+        axisY: {
             title: titleY,
         },
-        axisX:{
+        axisX: {
             minimum: minX,
             maximum: maxX
         },
