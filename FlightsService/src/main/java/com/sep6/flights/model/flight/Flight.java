@@ -24,6 +24,7 @@ public class Flight {
     private int month;
     private int day;
     private int dep_time;
+    private int dep_delay;
     private int arr_time;
     private int arr_delay;
     @Column(nullable = true)

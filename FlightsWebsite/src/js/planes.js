@@ -11,6 +11,7 @@ function selectedPlanes() {
             manufacturersWithPlanes();
             break;
         case 3:
+            meanDepartureAndArrivalDelay();
             break;
         case 4:
             break;
@@ -101,6 +102,100 @@ function showManufacturersWithPlanes(data) {
             legendMarkerColor: "grey",
             dataPoints: data
         }]
+    });
+    chart.render();
+}
+
+async function meanDepartureAndArrivalDelay() {
+
+    let departurePromise = fetch(flightsUrl + '/getMeanDepartureDelay')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+
+            data.forEach(element => {
+                    result.push({y: element.minutes, label: element.origin});
+                }
+            )
+            return result;
+
+        }).catch(function (error) {
+            console.log('Request failed', error);
+        });
+
+    let arrivalPromise = fetch(flightsUrl + '/getMeanArrivalDelay')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+
+            data.forEach(element => {
+                    result.push({y: element.minutes, label: element.origin});
+                }
+            )
+            return result;
+
+        }).catch(function (error) {
+            console.log('Request failed', error);
+        });
+
+    let departureData = await departurePromise;
+    let arrivalData = await arrivalPromise;
+
+    showMeanDelays(departureData, arrivalData);
+}
+
+function showMeanDelays(departureData, arrivalData) {
+    let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Mean departure and arrival delay for origins"
+        },
+        axisY: {
+            title: "Delay in minutes",
+            interval: 1,
+            minimum: -1,
+            maximum: 12
+        },
+        axisY2: {
+            interval: 1,
+            minimum: -1,
+            maximum: 12
+        },
+        axisX: {
+            title: "Origins",
+            interval: 1
+        },
+        toolTip: {
+            shared: true,
+            contentFormatter: function ( e ) {
+                let label = e.entries[0].dataPoint.label
+                return label + "<br>"
+                    + "Departure delay: " + convertMinute(e.entries[0].dataPoint.y) + " minutes <br>"
+                    + "Arrival delay: " + convertMinute(e.entries[1].dataPoint.y) + " minutes ";
+            }
+        },
+        legend: {
+            cursor: "pointer",
+        },
+        data: [{
+            type: "column",
+            name: "departure",
+            legendText: "Departure delay",
+            showInLegend: true,
+            dataPoints: departureData
+        },
+            {
+                type: "column",
+                name: "arrival",
+                legendText: "Arrival delay",
+                showInLegend: true,
+                dataPoints: arrivalData
+            }]
     });
     chart.render();
 }

@@ -142,3 +142,14 @@ function convertMonth(month) {
             return "This is not a valid month"
     }
 }
+
+function convertMinute(minuteValue) {
+    let decimalValue = Math.abs(Math.round(((minuteValue % 1) * 100) / 100 * 60));
+    let wholePart = minuteValue | 0;
+
+    return wholePart + ":" + padDigits(decimalValue, 2);
+}
+
+function padDigits(number, digits) {
+    return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+}

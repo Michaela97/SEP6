@@ -1,18 +1,12 @@
 package com.sep6.flights.service;
 
-import com.sep6.flights.model.flight.FlightDestination;
-import com.sep6.flights.model.flight.FlightsCountByMonth;
-import com.sep6.flights.model.flight.FlightsManufacturer;
-import com.sep6.flights.repository.flight.FlightDestinationRepository;
-import com.sep6.flights.repository.flight.FlightRepository;
-import com.sep6.flights.repository.flight.FlightsCountByMonthRepository;
-import com.sep6.flights.repository.flight.FlightsManufacturerRepository;
+import com.sep6.flights.model.flight.*;
+import com.sep6.flights.repository.flight.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,11 +16,15 @@ public class FlightService {
     private final FlightsCountByMonthRepository flightsCountByMonthRepository;
     private final FlightDestinationRepository flightDestinationRepository;
     private final FlightsManufacturerRepository flightsManufacturerRepository;
+    private final MeanArrivalDelayRepository meanArrivalDelayRepository;
+    private final MeanDepartureDelayRepository meanDepartureDelayRepository;
 
-    public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository) {
+    public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository, MeanArrivalDelayRepository meanArrivalDelayRepository, MeanDepartureDelayRepository meanDepartureDelayRepository) {
         this.flightsCountByMonthRepository = flightsCountByMonthRepository;
         this.flightDestinationRepository = flightDestinationRepository;
         this.flightsManufacturerRepository = flightsManufacturerRepository;
+        this.meanArrivalDelayRepository = meanArrivalDelayRepository;
+        this.meanDepartureDelayRepository = meanDepartureDelayRepository;
     }
 
     @GetMapping("/getTotalNumberOfFlights")
@@ -68,5 +66,17 @@ public class FlightService {
     public List<FlightsManufacturer> getFlightsByManufacturer() {
         return flightsManufacturerRepository.getNoOfFlightsByManufacturer();
     }
+
+    @GetMapping("/getMeanDepartureDelay")
+    public List<MeanDepartureDelay> getMeanDepartureDelay() {
+        return meanDepartureDelayRepository.getMeanDepartureDelay();
+    }
+
+    @GetMapping("/getMeanArrivalDelay")
+    public List<MeanArrivalDelay> getMeanArrivalDelay() {
+        return meanArrivalDelayRepository.getMeanArrivalDelay();
+    }
+
+
 
 }
