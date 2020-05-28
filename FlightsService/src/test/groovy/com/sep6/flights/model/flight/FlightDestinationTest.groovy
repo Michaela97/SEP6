@@ -12,44 +12,44 @@ import spock.lang.Specification
 @SpringBootTest(classes = Sep6Application.class)
 class FlightDestinationTest extends Specification {
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     private FlightDestinationRepository repository
 
 
     def "test get top destination from JFK"() {
-
+        given:
         String origin = "JFK"
 
         when:
-        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0, 10))
 
         then:
         assert !result.isEmpty()
-        assert  result.size() == 10
+        assert result.size() == 10
     }
 
     def "test get top destination from EWR"() {
-
+        given:
         String origin = "EWR"
 
         when:
-        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0, 10))
 
         then:
         assert !result.isEmpty()
-        assert  result.size() == 10
+        assert result.size() == 10
     }
 
     def "test get top destination from LGA"() {
-
+        given:
         String origin = "LGA"
 
         when:
-        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0,10))
+        def result = repository.getNoOfFlightsByDestination(origin, PageRequest.of(0, 10))
 
         then:
         assert !result.isEmpty()
-        assert  result.size() == 10
+        assert result.size() == 10
     }
 
 }
