@@ -10,6 +10,9 @@ function selectedWeather() {
         case 3:
             displayGraphTemperaturesAtJFK();
             break;
+        case 4:
+            displayGraphsAllTemperatureAttributes();
+            break;
         case 5:
             displayGraphNoOfObservationsPerOrigin();
             break;
@@ -30,7 +33,7 @@ function displayGraphNoOfObservationsPerOrigin() {
                     y: row.countOfObservations
                 });
             }
-            showColumnGraph("Weather observations per origin", "Number of observations", "Origins", processedData);
+            showColumnGraph("chartContainer", "Weather observations per origin", "Number of observations", "Origins", processedData);
         }).catch(function (error) {
         console.error('Request failed', error);
     });
@@ -49,7 +52,7 @@ function displayGraphTemperaturesAtJFK() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showScatterGraph("Temperatures at JFK", "Temperature in Celsius", processedData, false);
+                showScatterGraph("chartContainer", "Temperatures at JFK", "Temperature in Celsius", processedData, false);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -71,7 +74,7 @@ function displayGraphDailyMeanPerOrigin() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showScatterGraph("Daily mean temperature", "Daily mean in Celsius", processedData, true);
+                showScatterGraph("chartContainer", "Daily mean temperature", "Daily mean in Celsius", processedData, true);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -90,7 +93,7 @@ function displayGraphDailyMeanAtJFK() {
                 for (let row of data) {
                     processedData.push({x: new Date(row.timestamp), y: row.temperature});
                 }
-                showLineGraph("Daily mean temperature at JFK", "Daily mean in Celsius", processedData);
+                showLineGraph("chartContainer", "Daily mean temperature at JFK", "Daily mean in Celsius", processedData);
             } else {
                 return Promise.reject(new Error("No data"));
             }
@@ -99,9 +102,37 @@ function displayGraphDailyMeanAtJFK() {
     });
 }
 
-function showColumnGraph(title, titleY, titleX, data) {
+function displayGraphsAllTemperatureAttributes() {
+    fetch(weatherUrl + '/getAllTemperatureAttributes')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            if (data != null && data.length > 0) {
+                let processedDataTemp = [];
+                let processedDataDewp = [];
+                for (let row of data) {
+                    if (processedDataTemp[row.origin] == null) {
+                        processedDataTemp[row.origin] = [];
+                    }
+                    if (processedDataDewp[row.origin] == null) {
+                        processedDataDewp[row.origin] = [];
+                    }
+                    processedDataTemp[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
+                    processedDataDewp[row.origin].push({x: new Date(row.timestamp), y: row.dewPoint});
+                }
+                showSplineGraph("chartContainer", "Temperatures at origins", "Temperature in Celsius", processedDataTemp);
+                showSplineGraph("chartContainer2", "Dew points at origins", "Dew point in Celsius", processedDataDewp);
+            } else {
+                return Promise.reject(new Error("No data"));
+            }
+        }).catch(function (error) {
+        console.error('Request failed', error);
+    });
+}
 
-    let chart = new CanvasJS.Chart("chartContainer", {
+function showColumnGraph(graphId, title, titleY, titleX, data) {
+
+    let chart = new CanvasJS.Chart(graphId, {
         animationEnabled: true,
         theme: "light2",
         title: {
@@ -122,7 +153,7 @@ function showColumnGraph(title, titleY, titleX, data) {
     chart.render();
 }
 
-function showScatterGraph(title, titleY, data, hasMeanValues) {
+function showScatterGraph(graphId, title, titleY, data, hasMeanValues) {
     let colors = [
         {legend: "rgba(250,300,0,0.8)", marker: "rgba(250,300,0,0.2)"},
         {legend: "rgba(120,10,158,0.8)", marker: "rgba(120,10,158,0.2)"},
@@ -158,7 +189,7 @@ function showScatterGraph(title, titleY, data, hasMeanValues) {
     if (minX != null) minX.setMonth(minX.getMonth() - 1);
     if (maxX != null) maxX.setMonth(maxX.getMonth() + 1);
 
-    let chart = new CanvasJS.Chart("chartContainer", {
+    let chart = new CanvasJS.Chart(graphId, {
         theme: "light2",
         animationEnabled: true,
         title: {
@@ -176,8 +207,8 @@ function showScatterGraph(title, titleY, data, hasMeanValues) {
     chart.render();
 }
 
-function showLineGraph(title, titleY, data) {
-    let chart = new CanvasJS.Chart("chartContainer", {
+function showLineGraph(graphId, title, titleY, data) {
+    let chart = new CanvasJS.Chart(graphId, {
         theme: "light2",
         animationEnabled: true,
         title: {
@@ -197,6 +228,67 @@ function showLineGraph(title, titleY, data) {
             toolTipContent: "<span><b>Origin: JFK</b></span><br/><b> Date:</b> {x} <br/><b> Temperature:</b> {y} °C",
             dataPoints: data
         }]
+    });
+    chart.render();
+}
+
+function showSplineGraph(graphId, title, titleY, data) {
+    let colors = [
+        {legend: "rgba(250,300,0,0.8)", marker: "rgba(250,300,0,0.2)"},
+        {legend: "rgba(120,10,158,0.8)", marker: "rgba(120,10,158,0.2)"},
+        {legend: "rgba(0,148,158,0.8)", marker: "rgba(0,148,158,0.2)"}];
+
+    let minX = null;
+    let maxX = null;
+    let graphData = [];
+    for (let origin in data) {
+        if (minX == null || data[origin][0].x < minX.toString()) {
+            minX = new Date(data[origin][0].x);
+        }
+        if (maxX == null || data[origin][0].x > maxX.toString()) {
+            maxX = new Date(data[origin][data[origin].length - 1].x);
+        }
+
+        let colorSet = colors.pop();
+        graphData.push({
+            type: "spline",
+            name: origin,
+            showInLegend: true,
+            xValueFormatString: "DD MMM YY (h TT)",
+            yValueFormatString: "0.00",
+            toolTipContent: "<span><b>Origin: {name}</b></span><br/><b> Time:</b> {x} <br/><b> Temperature:</b> {y} °C",
+            color: colorSet.legend,
+            dataPoints: data[origin]
+        });
+    }
+    if (minX != null) minX.setMonth(minX.getMonth() - 1);
+    if (maxX != null) maxX.setMonth(maxX.getMonth() + 1);
+
+    let chart = new CanvasJS.Chart(graphId, {
+        theme: "light2",
+        animationEnabled: true,
+        title: {
+            text: title
+        },
+        axisY: {
+            title: titleY
+        },
+        axisX: {
+            minimum: minX,
+            maximum: maxX
+        },
+        legend: {
+            cursor: "pointer",
+            itemclick: function (e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                e.chart.render();
+            }
+        },
+        data: graphData
     });
     chart.render();
 }

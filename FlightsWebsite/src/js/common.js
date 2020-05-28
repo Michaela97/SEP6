@@ -80,6 +80,11 @@ function handleFlightsChange(selectedIndex) {
 
 function handleWeatherChange(selectedIndex) {
     switch (selectedIndex) {
+        case 4:
+            toggleGraph(false, chartContainer);
+            toggleGraph(false, chartContainer2);
+            toggleGraph(true, chartContainer3);
+            break;
         default:
             toggleGraph(false, chartContainer);
             toggleGraph(true, chartContainer3);
