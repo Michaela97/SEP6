@@ -22,6 +22,7 @@ function selectedPlanes() {
 }
 
 function getCountOfAirbusPlanesByModel() {
+    showSpinner();
     fetch(planesUrl + '/countOfAirbusPlanesByModelList')
         .then(status)
         .then(json)
@@ -33,6 +34,7 @@ function getCountOfAirbusPlanesByModel() {
                     result.push({y: element.numberOfPlanes, label: element.model});
                 }
             )
+            hideSpinner();
             showNumberOfPlanes(result)
 
         }).catch(function (error) {
@@ -65,6 +67,7 @@ function showNumberOfPlanes(data) {
 }
 
 function manufacturersWithPlanes() {
+    showSpinner();
     fetch(planesUrl + '/getManufacturersWithMoreThanTwoHundredPlanes')
         .then(status)
         .then(json)
@@ -76,6 +79,7 @@ function manufacturersWithPlanes() {
                     result.push({y: element.countOfPlanes, label: element.manufacturer});
                 }
             )
+            hideSpinner();
             showManufacturersWithPlanes(result)
 
         }).catch(function (error) {
@@ -108,7 +112,7 @@ function showManufacturersWithPlanes(data) {
 }
 
 async function meanDepartureAndArrivalDelay() {
-
+    showSpinner();
     let departurePromise = fetch(flightsUrl + '/getMeanDepartureDelay')
         .then(status)
         .then(json)
@@ -146,6 +150,7 @@ async function meanDepartureAndArrivalDelay() {
     let departureData = await departurePromise;
     let arrivalData = await arrivalPromise;
 
+    hideSpinner();
     showMeanDelays(departureData, arrivalData);
 }
 
@@ -202,6 +207,7 @@ function showMeanDelays(departureData, arrivalData) {
 }
 
 function meanAirtimeByOrigin() {
+    showSpinner();
     fetch(flightsUrl + '/getMeanAirtime')
         .then(status)
         .then(json)
@@ -213,6 +219,7 @@ function meanAirtimeByOrigin() {
                     result.push({y: element.meanAirtime, label: element.origin});
                 }
             )
+            hideSpinner();
             showAirtimeByOrigins(result)
 
         }).catch(function (error) {

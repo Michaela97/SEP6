@@ -22,6 +22,7 @@ function selectedFlight() {
 }
 
 function getTotalFlights() {
+    showSpinner();
     fetch(flightsUrl + '/getTotalNumberOfFlights')
         .then(status)
         .then(json)
@@ -33,6 +34,7 @@ function getTotalFlights() {
                     result.push({y: element.countOfFlights, label: convertMonth(element.month)});
                 }
             )
+            hideSpinner();
             showTotalFlights(result)
 
         }).catch(function (error) {
@@ -45,6 +47,7 @@ async function getFlightsFromOrigins() {
     let resultJFK = [];
     let resultEWR = [];
 
+    showSpinner();
     let promiseLGA =  fetch(flightsUrl + '/getTotalNumberOfFlightsFromLGA')
         .then(status)
         .then(json)
@@ -91,6 +94,7 @@ async function getFlightsFromOrigins() {
     await promiseJFK;
     await promiseEWR;
 
+    hideSpinner();
     showFlightsFromOrigins(resultLGA, resultJFK, resultEWR);
     showFlightsFromOriginsPercentage(resultLGA, resultJFK, resultEWR);
     showFlightsFromOriginsStacked(resultLGA, resultJFK, resultEWR);
@@ -101,6 +105,7 @@ async function getTopTenDestinations() {
     let resultJFK = [];
     let resultEWR = [];
 
+    showSpinner();
     let promiseLGA =  fetch(flightsUrl + '/getTopTenDestinationsFromLGA')
         .then(status)
         .then(json)
@@ -147,10 +152,12 @@ async function getTopTenDestinations() {
     await promiseJFK;
     await promiseEWR;
 
+    hideSpinner();
     showTopDestinations(resultLGA, resultJFK, resultEWR);
 }
 
 function getFlightsByManufacturer() {
+    showSpinner();
     fetch(flightsUrl + '/getFlightsByManufacturer')
         .then(status)
         .then(json)
@@ -161,6 +168,7 @@ function getFlightsByManufacturer() {
                     result.push({y: element.countOfFlights, label: element.manufacturer});
                 }
             )
+            hideSpinner();
             showFlightsByManufacturer(result)
 
         }).catch(function (error) {
