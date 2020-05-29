@@ -111,6 +111,7 @@ function displayGraphDailyMeanAtJFK() {
 }
 
 function displayGraphsAllTemperatureAttributes() {
+    showSpinner();
     fetch(weatherUrl + '/getAllTemperatureAttributes')
         .then(status)
         .then(json)
@@ -128,6 +129,7 @@ function displayGraphsAllTemperatureAttributes() {
                     processedDataTemp[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                     processedDataDewp[row.origin].push({x: new Date(row.timestamp), y: row.dewPoint});
                 }
+                hideSpinner();
                 showSplineGraph("chartContainer", "Temperatures at origins", "Temperature in Celsius", processedDataTemp);
                 showSplineGraph("chartContainer2", "Dew points at origins", "Dew point in Celsius", processedDataDewp);
             } else {
