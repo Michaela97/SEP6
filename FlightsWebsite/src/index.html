@@ -26,6 +26,16 @@
         margin: 0 auto 100px;
     }
 
+    .hint p {
+        text-align: center;
+        margin: auto;
+    }
+
+    .hint b {
+        font-size: large;
+        margin-right: 10px;
+    }
+
     .spinner {
         margin: 0 auto 100px;
         border: 16px solid #f3f3f3; /* Light grey */
@@ -87,6 +97,11 @@
 
     <!-- Loader -->
     <div id="spinner" class="spinner"></div>
+
+    <!-- Hint -->
+    <div id="hint" class="hint">
+        <p><b>Hint:</b>Click on the legend items in order to toggle between displayed data in the chart</p>
+    </div>
 
     <!-- GRAPH -->
     <div id="chartContainer" class="chart-container"></div>
