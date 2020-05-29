@@ -38,6 +38,7 @@ function init() {
     toggleDiv(true, chartContainer);
     toggleDiv(true, chartContainer2);
     toggleDiv(true, chartContainer3);
+    saveChartsState();
 
     wakeUpCall();
     hideSpinner();
