@@ -12,6 +12,12 @@ let flightsSelect = document.getElementById('flights');
 let weatherSelect = document.getElementById('weather');
 let planesSelect = document.getElementById('planes');
 
+let spinner = document.getElementById('spinner');
+
+let chartContainerIsDisabled;
+let chartContainer2IsDisabled;
+let chartContainer3IsDisabled;
+
 init();
 
 function toggleGraph(disabled, chart) {
@@ -29,6 +35,16 @@ function init() {
     toggleGraph(true, chartContainer);
     toggleGraph(true, chartContainer2);
     toggleGraph(true, chartContainer3);
+
+    wakeUpCall();
+    hideSpinner();
+}
+
+function wakeUpCall() {
+    fetch(flightsUrl + '/getTotalNumberOfFlights')
+        .catch(function (error) {
+            console.log('Wake up request failed, service unavailable', error);
+        });
 }
 
 function updateContainers(element) {
@@ -47,7 +63,7 @@ function updateContainers(element) {
 }
 
 function resetSelects(elementId) {
-    switch(elementId) {
+    switch (elementId) {
         case 'flights':
             weatherSelect.selectedIndex = 0;
             planesSelect.selectedIndex = 0;
@@ -157,4 +173,40 @@ function convertMinute(minuteValue) {
 
 function padDigits(number, digits) {
     return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+}
+
+function showSpinner() {
+    saveChartsState();
+    hideCharts();
+    spinner.style.display = "block";
+}
+
+function hideSpinner() {
+    restoreChartsState();
+    showCharts();
+    spinner.style.display = "none";
+}
+
+function saveChartsState() {
+    chartContainerIsDisabled = chartContainer.style.display === "none"
+    chartContainer2IsDisabled = chartContainer2.style.display === "none"
+    chartContainer3IsDisabled = chartContainer3.style.display === "none"
+}
+
+function restoreChartsState() {
+    chartContainer.style.display = chartContainerIsDisabled ? "none" : "block"
+    chartContainer2.style.display = chartContainer2IsDisabled ? "none" : "block"
+    chartContainer3.style.display = chartContainer3IsDisabled ? "none" : "block"
+}
+
+function hideCharts() {
+    toggleGraph(true, chartContainer);
+    toggleGraph(true, chartContainer2);
+    toggleGraph(true, chartContainer3);
+}
+
+function showCharts() {
+    toggleGraph(chartContainerIsDisabled, chartContainer);
+    toggleGraph(chartContainer2IsDisabled, chartContainer2);
+    toggleGraph(chartContainer3IsDisabled, chartContainer3);
 }

@@ -14,6 +14,7 @@ function selectedPlanes() {
             meanDepartureAndArrivalDelay();
             break;
         case 4:
+            meanAirtimeByOrigin();
             break;
         default:
             break;
@@ -21,6 +22,7 @@ function selectedPlanes() {
 }
 
 function getCountOfAirbusPlanesByModel() {
+    showSpinner();
     fetch(planesUrl + '/countOfAirbusPlanesByModelList')
         .then(status)
         .then(json)
@@ -32,6 +34,7 @@ function getCountOfAirbusPlanesByModel() {
                     result.push({y: element.numberOfPlanes, label: element.model});
                 }
             )
+            hideSpinner();
             showNumberOfPlanes(result)
 
         }).catch(function (error) {
@@ -64,6 +67,7 @@ function showNumberOfPlanes(data) {
 }
 
 function manufacturersWithPlanes() {
+    showSpinner();
     fetch(planesUrl + '/getManufacturersWithMoreThanTwoHundredPlanes')
         .then(status)
         .then(json)
@@ -75,6 +79,7 @@ function manufacturersWithPlanes() {
                     result.push({y: element.countOfPlanes, label: element.manufacturer});
                 }
             )
+            hideSpinner();
             showManufacturersWithPlanes(result)
 
         }).catch(function (error) {
@@ -107,7 +112,7 @@ function showManufacturersWithPlanes(data) {
 }
 
 async function meanDepartureAndArrivalDelay() {
-
+    showSpinner();
     let departurePromise = fetch(flightsUrl + '/getMeanDepartureDelay')
         .then(status)
         .then(json)
@@ -145,6 +150,7 @@ async function meanDepartureAndArrivalDelay() {
     let departureData = await departurePromise;
     let arrivalData = await arrivalPromise;
 
+    hideSpinner();
     showMeanDelays(departureData, arrivalData);
 }
 
@@ -196,6 +202,51 @@ function showMeanDelays(departureData, arrivalData) {
                 showInLegend: true,
                 dataPoints: arrivalData
             }]
+    });
+    chart.render();
+}
+
+function meanAirtimeByOrigin() {
+    showSpinner();
+    fetch(flightsUrl + '/getMeanAirtime')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+
+            let result = [];
+
+            data.forEach(element => {
+                    result.push({y: element.meanAirtime, label: element.origin});
+                }
+            )
+            hideSpinner();
+            showAirtimeByOrigins(result)
+
+        }).catch(function (error) {
+        console.log('Request failed', error);
+    });
+}
+
+function showAirtimeByOrigins(data) {
+    let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "The mean airtime of each of the origins"
+        },
+        axisY: {
+            title: "Airtime in minutes",
+        },
+        axisX: {
+            title: "Origins",
+            interval: 1
+        },
+        data: [{
+            type: "column",
+            yValueFormatString: "# minutes",
+            legendMarkerColor: "grey",
+            dataPoints: data
+        }]
     });
     chart.render();
 }

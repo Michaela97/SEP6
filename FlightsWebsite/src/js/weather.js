@@ -22,6 +22,7 @@ function selectedWeather() {
 }
 
 function displayGraphNoOfObservationsPerOrigin() {
+    showSpinner();
     fetch(weatherUrl + '/getNumberOfWeatherObservationsByOrigin')
         .then(status)
         .then(json)
@@ -33,6 +34,7 @@ function displayGraphNoOfObservationsPerOrigin() {
                     y: row.countOfObservations
                 });
             }
+            hideSpinner();
             showColumnGraph("chartContainer", "Weather observations per origin", "Number of observations", "Origins", processedData);
         }).catch(function (error) {
         console.error('Request failed', error);
@@ -40,6 +42,7 @@ function displayGraphNoOfObservationsPerOrigin() {
 }
 
 function displayGraphTemperaturesAtJFK() {
+    showSpinner();
     fetch(weatherUrl + '/getTemperaturesAtJFK')
         .then(status)
         .then(json)
@@ -52,6 +55,7 @@ function displayGraphTemperaturesAtJFK() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
+                hideSpinner();
                 showScatterGraph("chartContainer", "Temperatures at JFK", "Temperature in Celsius", processedData, false);
             } else {
                 return Promise.reject(new Error("No data"));
@@ -62,6 +66,7 @@ function displayGraphTemperaturesAtJFK() {
 }
 
 function displayGraphDailyMeanPerOrigin() {
+    showSpinner();
     fetch(weatherUrl + '/getDailyTemperatureMeanByOrigin')
         .then(status)
         .then(json)
@@ -74,6 +79,7 @@ function displayGraphDailyMeanPerOrigin() {
                     }
                     processedData[row.origin].push({x: new Date(row.timestamp), y: row.temperature});
                 }
+                hideSpinner();
                 showScatterGraph("chartContainer", "Daily mean temperature", "Daily mean in Celsius", processedData, true);
             } else {
                 return Promise.reject(new Error("No data"));
@@ -84,6 +90,7 @@ function displayGraphDailyMeanPerOrigin() {
 }
 
 function displayGraphDailyMeanAtJFK() {
+    showSpinner();
     fetch(weatherUrl + '/getDailyTemperatureMeanAtJFK')
         .then(status)
         .then(json)
@@ -93,6 +100,7 @@ function displayGraphDailyMeanAtJFK() {
                 for (let row of data) {
                     processedData.push({x: new Date(row.timestamp), y: row.temperature});
                 }
+                hideSpinner();
                 showLineGraph("chartContainer", "Daily mean temperature at JFK", "Daily mean in Celsius", processedData);
             } else {
                 return Promise.reject(new Error("No data"));
