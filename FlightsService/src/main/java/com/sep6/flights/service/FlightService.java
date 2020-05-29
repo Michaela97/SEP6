@@ -18,13 +18,15 @@ public class FlightService {
     private final FlightsManufacturerRepository flightsManufacturerRepository;
     private final MeanArrivalDelayRepository meanArrivalDelayRepository;
     private final MeanDepartureDelayRepository meanDepartureDelayRepository;
+    private MeanAirtimeRepository meanAirtimeRepository;
 
-    public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository, MeanArrivalDelayRepository meanArrivalDelayRepository, MeanDepartureDelayRepository meanDepartureDelayRepository) {
+    public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository, MeanArrivalDelayRepository meanArrivalDelayRepository, MeanDepartureDelayRepository meanDepartureDelayRepository, MeanAirtimeRepository meanAirtimeRepository) {
         this.flightsCountByMonthRepository = flightsCountByMonthRepository;
         this.flightDestinationRepository = flightDestinationRepository;
         this.flightsManufacturerRepository = flightsManufacturerRepository;
         this.meanArrivalDelayRepository = meanArrivalDelayRepository;
         this.meanDepartureDelayRepository = meanDepartureDelayRepository;
+        this.meanAirtimeRepository = meanAirtimeRepository;
     }
 
     @GetMapping("/getTotalNumberOfFlights")
@@ -77,6 +79,9 @@ public class FlightService {
         return meanArrivalDelayRepository.getMeanArrivalDelay();
     }
 
-
+    @GetMapping("/getMeanAirtime")
+    public List<MeanAirtime> getMeanAirtime() {
+        return meanAirtimeRepository.getMeanAirtimeByOrigin();
+    }
 
 }
