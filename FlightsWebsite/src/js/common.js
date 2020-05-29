@@ -4,6 +4,7 @@ const flightsUrl = url + '/flights'
 const weatherUrl = url + '/weather'
 const planesUrl = url + '/planes'
 
+let hintContainer = document.getElementById("hint");
 let chartContainer = document.getElementById("chartContainer");
 let chartContainer2 = document.getElementById("chartContainer2");
 let chartContainer3 = document.getElementById("chartContainer3");
@@ -14,27 +15,30 @@ let planesSelect = document.getElementById('planes');
 
 let spinner = document.getElementById('spinner');
 
+let hintContainerIsDisabled;
 let chartContainerIsDisabled;
 let chartContainer2IsDisabled;
 let chartContainer3IsDisabled;
 
 init();
 
-function toggleGraph(disabled, chart) {
+function toggleDiv(disabled, div) {
 
     if (disabled === true) {
-        //hide chart
-        chart.style.display = "none";
+        //hide div
+        div.style.display = "none";
     } else {
-        //show chart
-        chart.style.display = "block";
+        //show div
+        div.style.display = "block";
     }
 }
 
 function init() {
-    toggleGraph(true, chartContainer);
-    toggleGraph(true, chartContainer2);
-    toggleGraph(true, chartContainer3);
+    toggleDiv(true, hintContainer);
+    toggleDiv(true, chartContainer);
+    toggleDiv(true, chartContainer2);
+    toggleDiv(true, chartContainer3);
+    saveChartsState();
 
     wakeUpCall();
     hideSpinner();
@@ -80,36 +84,45 @@ function resetSelects(elementId) {
 }
 
 function handleFlightsChange(selectedIndex) {
+    toggleDiv(true,hintContainer);
     switch (selectedIndex) {
         case 2:
-            toggleGraph(false, chartContainer3);
-            toggleGraph(false, chartContainer);
-            toggleGraph(false, chartContainer2);
+            toggleDiv(false, chartContainer3);
+            toggleDiv(false, chartContainer);
+            toggleDiv(false, chartContainer2);
             break;
         default:
-            toggleGraph(false, chartContainer);
-            toggleGraph(true, chartContainer3);
-            toggleGraph(true, chartContainer2);
+            toggleDiv(false, chartContainer);
+            toggleDiv(true, chartContainer3);
+            toggleDiv(true, chartContainer2);
             break;
     }
 }
 
 function handleWeatherChange(selectedIndex) {
     switch (selectedIndex) {
+        case 4:
+            toggleDiv(false,hintContainer);
+            toggleDiv(false, chartContainer);
+            toggleDiv(false, chartContainer2);
+            toggleDiv(true, chartContainer3);
+            break;
         default:
-            toggleGraph(false, chartContainer);
-            toggleGraph(true, chartContainer3);
-            toggleGraph(true, chartContainer2);
+            toggleDiv(true,hintContainer);
+            toggleDiv(false, chartContainer);
+            toggleDiv(true, chartContainer3);
+            toggleDiv(true, chartContainer2);
             break;
     }
 }
 
 function handlePlanesChange(selectedIndex) {
+    toggleDiv(true,hintContainer);
     switch (selectedIndex) {
         default:
-            toggleGraph(false, chartContainer);
-            toggleGraph(true, chartContainer3);
-            toggleGraph(true, chartContainer2);
+            toggleDiv(false, chartContainer);
+            toggleDiv(true, chartContainer3);
+            toggleDiv(true, chartContainer2);
             break;
     }
 }
@@ -183,25 +196,29 @@ function hideSpinner() {
 }
 
 function saveChartsState() {
+    hintContainerIsDisabled = hintContainer.style.display === "none"
     chartContainerIsDisabled = chartContainer.style.display === "none"
     chartContainer2IsDisabled = chartContainer2.style.display === "none"
     chartContainer3IsDisabled = chartContainer3.style.display === "none"
 }
 
 function restoreChartsState() {
+    hintContainer.style.display = hintContainerIsDisabled ? "none" : "block"
     chartContainer.style.display = chartContainerIsDisabled ? "none" : "block"
     chartContainer2.style.display = chartContainer2IsDisabled ? "none" : "block"
     chartContainer3.style.display = chartContainer3IsDisabled ? "none" : "block"
 }
 
 function hideCharts() {
-    toggleGraph(true, chartContainer);
-    toggleGraph(true, chartContainer2);
-    toggleGraph(true, chartContainer3);
+    toggleDiv(true,hintContainer);
+    toggleDiv(true, chartContainer);
+    toggleDiv(true, chartContainer2);
+    toggleDiv(true, chartContainer3);
 }
 
 function showCharts() {
-    toggleGraph(chartContainerIsDisabled, chartContainer);
-    toggleGraph(chartContainer2IsDisabled, chartContainer2);
-    toggleGraph(chartContainer3IsDisabled, chartContainer3);
+    toggleDiv(hintContainerIsDisabled, hintContainer);
+    toggleDiv(chartContainerIsDisabled, chartContainer);
+    toggleDiv(chartContainer2IsDisabled, chartContainer2);
+    toggleDiv(chartContainer3IsDisabled, chartContainer3);
 }

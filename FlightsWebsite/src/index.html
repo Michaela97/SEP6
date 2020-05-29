@@ -26,6 +26,16 @@
         margin: 0 auto 100px;
     }
 
+    .hint p {
+        text-align: center;
+        margin: auto;
+    }
+
+    .hint b {
+        font-size: large;
+        margin-right: 10px;
+    }
+
     .spinner {
         margin: 0 auto 100px;
         border: 16px solid #f3f3f3; /* Light grey */
@@ -48,7 +58,7 @@
 <div class="w3-content" style="max-width:1500px">
 
     <!-- HEADER -->
-    <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
+    <header class="w3-panel w3-center w3-opacity">
         <h1 class="w3-xlarge">VIA University Collage</h1>
         <h1>AIRLINES</h1>
 
@@ -87,6 +97,11 @@
 
     <!-- Loader -->
     <div id="spinner" class="spinner"></div>
+
+    <!-- Hint -->
+    <div id="hint" class="hint">
+        <p><b>Hint:</b>Click on the legend items in order to toggle between displayed data in the chart</p>
+    </div>
 
     <!-- GRAPH -->
     <div id="chartContainer" class="chart-container"></div>

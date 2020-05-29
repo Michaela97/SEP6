@@ -1,6 +1,8 @@
 package com.sep6.flights.service;
 
+import com.sep6.flights.model.weather.TemperatureAttributesByOrigin;
 import com.sep6.flights.model.weather.WeatherObservationsByOrigin;
+import com.sep6.flights.repository.weather.TemperatureAttributesByOriginRepository;
 import com.sep6.flights.repository.weather.WeatherObservationsByOriginRepository;
 import com.sep6.flights.model.weather.TemperaturesByOrigin;
 import com.sep6.flights.repository.weather.TemperaturesByOriginRepository;
@@ -16,12 +18,14 @@ public class WeatherService {
 
     private final WeatherObservationsByOriginRepository weatherObservationsByOriginRepository;
     private final TemperaturesByOriginRepository temperaturesByOriginRepository;
+    private final TemperatureAttributesByOriginRepository temperatureAttributesByOriginRepository;
 
     private final String ORIGIN_JFK = "JFK";
 
-    public WeatherService(WeatherObservationsByOriginRepository weatherObservationsByOriginRepository,TemperaturesByOriginRepository temperaturesByOriginRepository) {
+    public WeatherService(WeatherObservationsByOriginRepository weatherObservationsByOriginRepository,TemperaturesByOriginRepository temperaturesByOriginRepository, TemperatureAttributesByOriginRepository temperatureAttributesByOriginRepository) {
         this.weatherObservationsByOriginRepository = weatherObservationsByOriginRepository;
         this.temperaturesByOriginRepository = temperaturesByOriginRepository;
+        this.temperatureAttributesByOriginRepository = temperatureAttributesByOriginRepository;
     }
 
     @GetMapping("/getNumberOfWeatherObservationsByOrigin")
@@ -42,5 +46,10 @@ public class WeatherService {
     @GetMapping("/getDailyTemperatureMeanAtJFK")
     public List<TemperaturesByOrigin> getDailyTemperatureMeanAtJFK() {
         return temperaturesByOriginRepository.getDailyTemperatureMeanAtOrigin(ORIGIN_JFK);
+    }
+
+    @GetMapping("/getAllTemperatureAttributes")
+    public List<TemperatureAttributesByOrigin> getAllTemperatureAttributes() {
+        return temperatureAttributesByOriginRepository.getAllTemperatureAttributes();
     }
 }
