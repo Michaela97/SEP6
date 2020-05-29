@@ -84,7 +84,7 @@ function resetSelects(elementId) {
 }
 
 function handleFlightsChange(selectedIndex) {
-    toggleDiv(true,hintContainer);
+    toggleDiv(true, hintContainer);
     switch (selectedIndex) {
         case 2:
             toggleDiv(false, chartContainer3);
@@ -101,14 +101,20 @@ function handleFlightsChange(selectedIndex) {
 
 function handleWeatherChange(selectedIndex) {
     switch (selectedIndex) {
+        case 1:
+            toggleDiv(false, hintContainer);
+            toggleDiv(false, chartContainer);
+            toggleDiv(true, chartContainer2);
+            toggleDiv(true, chartContainer3);
+            break;
         case 4:
-            toggleDiv(false,hintContainer);
+            toggleDiv(false, hintContainer);
             toggleDiv(false, chartContainer);
             toggleDiv(false, chartContainer2);
             toggleDiv(true, chartContainer3);
             break;
         default:
-            toggleDiv(true,hintContainer);
+            toggleDiv(true, hintContainer);
             toggleDiv(false, chartContainer);
             toggleDiv(true, chartContainer3);
             toggleDiv(true, chartContainer2);
@@ -117,7 +123,7 @@ function handleWeatherChange(selectedIndex) {
 }
 
 function handlePlanesChange(selectedIndex) {
-    toggleDiv(true,hintContainer);
+    toggleDiv(true, hintContainer);
     switch (selectedIndex) {
         default:
             toggleDiv(false, chartContainer);
@@ -210,7 +216,7 @@ function restoreChartsState() {
 }
 
 function hideCharts() {
-    toggleDiv(true,hintContainer);
+    toggleDiv(true, hintContainer);
     toggleDiv(true, chartContainer);
     toggleDiv(true, chartContainer2);
     toggleDiv(true, chartContainer3);
