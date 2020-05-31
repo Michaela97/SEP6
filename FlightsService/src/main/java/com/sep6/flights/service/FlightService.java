@@ -18,7 +18,7 @@ public class FlightService {
     private final FlightsManufacturerRepository flightsManufacturerRepository;
     private final MeanArrivalDelayRepository meanArrivalDelayRepository;
     private final MeanDepartureDelayRepository meanDepartureDelayRepository;
-    private MeanAirtimeRepository meanAirtimeRepository;
+    private final MeanAirtimeRepository meanAirtimeRepository;
 
     public FlightService(FlightsCountByMonthRepository flightsCountByMonthRepository, FlightDestinationRepository flightDestinationRepository, FlightsManufacturerRepository flightsManufacturerRepository, MeanArrivalDelayRepository meanArrivalDelayRepository, MeanDepartureDelayRepository meanDepartureDelayRepository, MeanAirtimeRepository meanAirtimeRepository) {
         this.flightsCountByMonthRepository = flightsCountByMonthRepository;
