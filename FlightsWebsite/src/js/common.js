@@ -1,5 +1,5 @@
-const url = 'https://flights-service-buki55n7ba-lz.a.run.app';
-// const url = 'http://localhost:8080';
+// const url = 'https://flights-service-buki55n7ba-lz.a.run.app';
+const url = 'http://localhost:8080';
 const flightsUrl = url + '/flights'
 const weatherUrl = url + '/weather'
 const planesUrl = url + '/planes'
