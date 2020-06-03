@@ -1,5 +1,10 @@
 #debug: true
+
 spring:
+  jmx:
+    enabled: false
+  main:
+    lazy-initialization: true
   jpa:
     database: POSTGRESQL
     show-sql: true
